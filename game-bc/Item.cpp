@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -48,11 +48,11 @@ const idEventDef EV_HideObjective( "<hideobjective>", "e" );
 const idEventDef EV_CamShot( "<camshot>" );
 
 CLASS_DECLARATION( idEntity, idItem )
-	EVENT( EV_DropToFloor,		idItem::Event_DropToFloor )
-	EVENT( EV_Touch,			idItem::Event_Touch )
-	EVENT( EV_Activate,			idItem::Event_Trigger )
-	EVENT( EV_RespawnItem,		idItem::Event_Respawn )
-	EVENT( EV_RespawnFx,		idItem::Event_RespawnFx )
+EVENT( EV_DropToFloor,		idItem::Event_DropToFloor )
+EVENT( EV_Touch,			idItem::Event_Touch )
+EVENT( EV_Activate,			idItem::Event_Trigger )
+EVENT( EV_RespawnItem,		idItem::Event_Respawn )
+EVENT( EV_RespawnFx,		idItem::Event_RespawnFx )
 END_CLASS
 
 
@@ -61,7 +61,8 @@ END_CLASS
 idItem::idItem
 ================
 */
-idItem::idItem() {
+idItem::idItem()
+{
 	spin = false;
 	inView = false;
 	inViewTime = 0;
@@ -86,9 +87,11 @@ idItem::idItem() {
 idItem::~idItem
 ================
 */
-idItem::~idItem() {
+idItem::~idItem()
+{
 	// remove the highlight shell
-	if ( itemShellHandle != -1 ) {
+	if( itemShellHandle != -1 )
+	{
 		gameRenderWorld->FreeEntityDef( itemShellHandle );
 	}
 
@@ -101,8 +104,10 @@ idItem::~idItem() {
 idItem::FreeLightDef
 =================
 */
-void idItem::FreeLightDef( void ) {
-	if ( lightDefHandle != -1 ) {
+void idItem::FreeLightDef()
+{
+	if( lightDefHandle != -1 )
+	{
 		renderLight.lightRadius = vec3_zero;
 		gameRenderWorld->FreeLightDef( lightDefHandle );
 		lightDefHandle = -1;
@@ -115,7 +120,8 @@ void idItem::FreeLightDef( void ) {
 idItem::Save
 ================
 */
-void idItem::Save( idSaveGame *savefile ) const {
+void idItem::Save( idSaveGame* savefile ) const
+{
 
 	savefile->WriteVec3( orgOrigin );
 	savefile->WriteBool( spin );
@@ -131,7 +137,7 @@ void idItem::Save( idSaveGame *savefile ) const {
 
 // ---> sikk - Crumb Light
 	savefile->WriteRenderLight( renderLight );
-	savefile->WriteInt( (int)lightDefHandle );
+	savefile->WriteInt( ( int )lightDefHandle );
 	savefile->WriteVec3( lightOffset );
 	savefile->WriteVec3( lightColor );
 // <--- sikk - Crumb Light
@@ -142,7 +148,8 @@ void idItem::Save( idSaveGame *savefile ) const {
 idItem::Restore
 ================
 */
-void idItem::Restore( idRestoreGame *savefile ) {
+void idItem::Restore( idRestoreGame* savefile )
+{
 
 	savefile->ReadVec3( orgOrigin );
 	savefile->ReadBool( spin );
@@ -158,7 +165,7 @@ void idItem::Restore( idRestoreGame *savefile ) {
 
 // ---> sikk - Crumb Light
 	savefile->ReadRenderLight( renderLight );
-	savefile->ReadInt( (int &)lightDefHandle );
+	savefile->ReadInt( ( int& )lightDefHandle );
 	savefile->ReadVec3( lightOffset );
 	savefile->ReadVec3( lightColor );
 // <--- sikk - Crumb Light
@@ -171,9 +178,11 @@ void idItem::Restore( idRestoreGame *savefile ) {
 idItem::UpdateRenderEntity
 ================
 */
-bool idItem::UpdateRenderEntity( renderEntity_s *renderEntity, const renderView_t *renderView ) const {
+bool idItem::UpdateRenderEntity( renderEntity_s* renderEntity, const renderView_t* renderView ) const
+{
 
-	if ( lastRenderViewTime == renderView->time ) {
+	if( lastRenderViewTime == renderView->time )
+	{
 		return false;
 	}
 
@@ -187,35 +196,51 @@ bool idItem::UpdateRenderEntity( renderEntity_s *renderEntity, const renderView_
 	// two second pulse cycle
 	float cycle = ( renderView->time - inViewTime ) / 2000.0f;
 
-	if ( d > 0.94f ) {
-		if ( !inView ) {
+	if( d > 0.94f )
+	{
+		if( !inView )
+		{
 			inView = true;
-			if ( cycle > lastCycle ) {
+			if( cycle > lastCycle )
+			{
 				// restart at the beginning
 				inViewTime = renderView->time;
 				cycle = 0.0f;
 			}
 		}
-	} else {
-		if ( inView ) {
+	}
+	else
+	{
+		if( inView )
+		{
 			inView = false;
 			lastCycle = ceil( cycle );
 		}
 	}
 
-	// fade down after the last pulse finishes 
-	if ( !inView && cycle > lastCycle ) {
+	// fade down after the last pulse finishes
+	if( !inView && cycle > lastCycle )
+	{
 		renderEntity->shaderParms[4] = 0.0f;
-	} else {
+	}
+	else
+	{
 		// pulse up in 1/4 second
-		cycle -= (int)cycle;
-		if ( cycle < 0.1f ) {
+		cycle -= ( int )cycle;
+		if( cycle < 0.1f )
+		{
 			renderEntity->shaderParms[4] = cycle * 10.0f;
-		} else if ( cycle < 0.2f ) {
+		}
+		else if( cycle < 0.2f )
+		{
 			renderEntity->shaderParms[4] = 1.0f;
-		} else if ( cycle < 0.3f ) {
+		}
+		else if( cycle < 0.3f )
+		{
 			renderEntity->shaderParms[4] = 1.0f - ( cycle - 0.2f ) * 10.0f;
-		} else {
+		}
+		else
+		{
 			// stay off between pulses
 			renderEntity->shaderParms[4] = 0.0f;
 		}
@@ -230,16 +255,19 @@ bool idItem::UpdateRenderEntity( renderEntity_s *renderEntity, const renderView_
 idItem::ModelCallback
 ================
 */
-bool idItem::ModelCallback( renderEntity_t *renderEntity, const renderView_t *renderView ) {
-	const idItem *ent;
+bool idItem::ModelCallback( renderEntity_t* renderEntity, const renderView_t* renderView )
+{
+	const idItem* ent;
 
 	// this may be triggered by a model trace or other non-view related source
-	if ( !renderView ) {
+	if( !renderView )
+	{
 		return false;
 	}
 
-	ent = static_cast<idItem *>(gameLocal.entities[ renderEntity->entityNum ]);
-	if ( !ent ) {
+	ent = static_cast<idItem*>( gameLocal.entities[ renderEntity->entityNum ] );
+	if( !ent )
+	{
 		gameLocal.Error( "idItem::ModelCallback: callback with NULL game entity" );
 	}
 
@@ -251,9 +279,12 @@ bool idItem::ModelCallback( renderEntity_t *renderEntity, const renderView_t *re
 idItem::Think
 ================
 */
-void idItem::Think( void ) {
-	if ( thinkFlags & TH_THINK ) {
-		if ( spin ) {
+void idItem::Think()
+{
+	if( thinkFlags & TH_THINK )
+	{
+		if( spin )
+		{
 			idAngles	ang;
 			idVec3		org;
 
@@ -277,22 +308,26 @@ void idItem::Think( void ) {
 
 // ---> sikk - Crumb Light
 	// add the light
-	if ( renderLight.lightRadius.x > 0.0f ) {
+	if( renderLight.lightRadius.x > 0.0f )
+	{
 		renderLight.origin = GetPhysics()->GetOrigin() + GetPhysics()->GetAxis() * lightOffset;
 		renderLight.axis = GetPhysics()->GetAxis();
-		if ( ( lightDefHandle != -1 ) ) {
+		if( ( lightDefHandle != -1 ) )
+		{
 			//if ( lightEndTime > 0 && gameLocal.time <= lightEndTime + gameLocal.GetMSec() ) {
 			//	idVec3 color( 0, 0, 0 );
 			//	if ( gameLocal.time < lightEndTime ) {
 			//		float frac = ( float )( gameLocal.time - lightStartTime ) / ( float )( lightEndTime - lightStartTime );
 			//		color.Lerp( lightColor, color, frac );
-			//	} 
+			//	}
 			//	renderLight.shaderParms[SHADERPARM_RED] = color.x;
 			//	renderLight.shaderParms[SHADERPARM_GREEN] = color.y;
 			//	renderLight.shaderParms[SHADERPARM_BLUE] = color.z;
-			//} 
+			//}
 			gameRenderWorld->UpdateLightDef( lightDefHandle, &renderLight );
-		} else {
+		}
+		else
+		{
 			lightDefHandle = gameRenderWorld->AddLightDef( &renderLight );
 		}
 	}
@@ -304,10 +339,12 @@ void idItem::Think( void ) {
 idItem::Present
 ================
 */
-void idItem::Present( void ) {
+void idItem::Present()
+{
 	idEntity::Present();
 
-	if ( !fl.hidden && pulse ) {
+	if( !fl.hidden && pulse )
+	{
 		// also add a highlight shell model
 		renderEntity_t	shell;
 
@@ -318,9 +355,12 @@ void idItem::Present( void ) {
 		shell.callback = idItem::ModelCallback;
 		shell.entityNum = entityNumber;
 		shell.customShader = shellMaterial;
-		if ( itemShellHandle == -1 ) {
+		if( itemShellHandle == -1 )
+		{
 			itemShellHandle = gameRenderWorld->AddEntityDef( &shell );
-		} else {
+		}
+		else
+		{
 			gameRenderWorld->UpdateEntityDef( itemShellHandle, &shell );
 		}
 
@@ -332,37 +372,46 @@ void idItem::Present( void ) {
 idItem::Spawn
 ================
 */
-void idItem::Spawn( void ) {
+void idItem::Spawn()
+{
 	idStr		giveTo;
-	idEntity *	ent;
+	idEntity* 	ent;
 	float		tsize;
 
-	if ( spawnArgs.GetBool( "dropToFloor" ) ) {
+	if( spawnArgs.GetBool( "dropToFloor" ) )
+	{
 		PostEventMS( &EV_DropToFloor, 0 );
 	}
 
-	if ( spawnArgs.GetFloat( "triggersize", "0", tsize ) ) {
+	if( spawnArgs.GetFloat( "triggersize", "0", tsize ) )
+	{
 		GetPhysics()->GetClipModel()->LoadModel( idTraceModel( idBounds( vec3_origin ).Expand( tsize ) ) );
 		GetPhysics()->GetClipModel()->Link( gameLocal.clip );
 	}
 
-	if ( spawnArgs.GetBool( "start_off" ) ) {
+	if( spawnArgs.GetBool( "start_off" ) )
+	{
 		GetPhysics()->SetContents( 0 );
 		Hide();
-	} else {
+	}
+	else
+	{
 		GetPhysics()->SetContents( CONTENTS_TRIGGER );
 	}
 
 	giveTo = spawnArgs.GetString( "owner" );
-	if ( giveTo.Length() ) {
+	if( giveTo.Length() )
+	{
 		ent = gameLocal.FindEntity( giveTo );
-		if ( !ent ) {
+		if( !ent )
+		{
 			gameLocal.Error( "Item couldn't find owner '%s'", giveTo.c_str() );
 		}
 		PostEventMS( &EV_Touch, 0, ent, NULL );
 	}
 
-	if ( spawnArgs.GetBool( "spin" ) ) {
+	if( spawnArgs.GetBool( "spin" ) )
+	{
 		spin = true;
 		BecomeActive( TH_THINK );
 	}
@@ -382,7 +431,8 @@ void idItem::Spawn( void ) {
 // ---> sikk - Modifier System
 	// this is used for modifiers but can be specified for any item
 	int removeDelay = spawnArgs.GetInt( "removeDelay" );
-	if ( removeDelay > 0 ) {
+	if( removeDelay > 0 )
+	{
 		PostEventSec( &EV_Remove, removeDelay );
 	}
 // <--- sikk - Modifier System
@@ -393,12 +443,13 @@ void idItem::Spawn( void ) {
 	idVec3	light_offset;
 	memset( &renderLight, 0, sizeof( renderLight ) );
 	shaderName = spawnArgs.GetString( "mtr_light_shader" );
-	if ( *(const char *)shaderName ) {
+	if( *( const char* )shaderName )
+	{
 		renderLight.shader = declManager->FindMaterial( shaderName, false );
 		renderLight.pointLight = true;
 		renderLight.lightRadius[0] =
-		renderLight.lightRadius[1] =
-		renderLight.lightRadius[2] = spawnArgs.GetFloat( "light_radius" );
+			renderLight.lightRadius[1] =
+				renderLight.lightRadius[2] = spawnArgs.GetFloat( "light_radius" );
 		spawnArgs.GetVector( "light_color", "1 1 1", light_color );
 		renderLight.shaderParms[0] = light_color[0];
 		renderLight.shaderParms[1] = light_color[1];
@@ -409,7 +460,8 @@ void idItem::Spawn( void ) {
 // <--- sikk - Crumb Light
 
 // ---> sikk - Crumb count
-	if ( spawnArgs.GetBool( "inv_crumb" ) ) {
+	if( spawnArgs.GetBool( "inv_crumb" ) )
+	{
 		gameLocal.numCrumbs++;
 	}
 // <--- sikk - Crumb count
@@ -421,13 +473,16 @@ void idItem::Spawn( void ) {
 idItem::GetAttributes
 ================
 */
-void idItem::GetAttributes( idDict &attributes ) {
+void idItem::GetAttributes( idDict& attributes )
+{
 	int					i;
-	const idKeyValue	*arg;
+	const idKeyValue*	arg;
 
-	for( i = 0; i < spawnArgs.GetNumKeyVals(); i++ ) {
+	for( i = 0; i < spawnArgs.GetNumKeyVals(); i++ )
+	{
 		arg = spawnArgs.GetKeyVal( i );
-		if ( arg->GetKey().Left( 4 ) == "inv_" ) {
+		if( arg->GetKey().Left( 4 ) == "inv_" )
+		{
 			attributes.Set( arg->GetKey().Right( arg->GetKey().Length() - 4 ), arg->GetValue() );
 		}
 	}
@@ -438,15 +493,18 @@ void idItem::GetAttributes( idDict &attributes ) {
 idItem::GiveToPlayer
 ================
 */
-bool idItem::GiveToPlayer( idPlayer *player ) {
-	if ( player == NULL ) {
+bool idItem::GiveToPlayer( idPlayer* player )
+{
+	if( player == NULL )
+	{
 		return false;
 	}
 
-	if ( spawnArgs.GetBool( "inv_carry" ) ) {
+	if( spawnArgs.GetBool( "inv_carry" ) )
+	{
 		return player->GiveInventoryItem( &spawnArgs );
-	} 
-	
+	}
+
 	return player->GiveItem( this );
 }
 
@@ -455,8 +513,10 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 idItem::Pickup
 ================
 */
-bool idItem::Pickup( idPlayer *player ) {
-	if ( !GiveToPlayer( player ) ) {
+bool idItem::Pickup( idPlayer* player )
+{
+	if( !GiveToPlayer( player ) )
+	{
 		return false;
 	}
 
@@ -477,7 +537,8 @@ bool idItem::Pickup( idPlayer *player ) {
 	FreeLightDef();	// sikk - Crumb Light
 
 	// add the highlight shell
-	if ( itemShellHandle != -1 ) {
+	if( itemShellHandle != -1 )
+	{
 		gameRenderWorld->FreeEntityDef( itemShellHandle );
 		itemShellHandle = -1;
 	}
@@ -486,16 +547,21 @@ bool idItem::Pickup( idPlayer *player ) {
 	bool dropped = spawnArgs.GetBool( "dropped" );
 	bool no_respawn = spawnArgs.GetBool( "no_respawn" );
 
-	if ( respawn && !dropped && !no_respawn ) {
-		const char *sfx = spawnArgs.GetString( "fxRespawn" );
-		if ( sfx && *sfx ) {
+	if( respawn && !dropped && !no_respawn )
+	{
+		const char* sfx = spawnArgs.GetString( "fxRespawn" );
+		if( sfx && *sfx )
+		{
 			PostEventSec( &EV_RespawnFx, respawn - 0.5f );
-		} 
+		}
 		PostEventSec( &EV_RespawnItem, respawn );
-	} else if ( !spawnArgs.GetBool( "inv_objective" ) && !no_respawn ) {
+	}
+	else if( !spawnArgs.GetBool( "inv_objective" ) && !no_respawn )
+	{
 		// give some time for the pickup sound to play
 		// FIXME: Play on the owner
-		if ( !spawnArgs.GetBool( "inv_carry" ) ) {
+		if( !spawnArgs.GetBool( "inv_carry" ) )
+		{
 			PostEventMS( &EV_Remove, 5000 );
 		}
 	}
@@ -509,11 +575,13 @@ bool idItem::Pickup( idPlayer *player ) {
 idItem::Event_DropToFloor
 ================
 */
-void idItem::Event_DropToFloor( void ) {
+void idItem::Event_DropToFloor()
+{
 	trace_t trace;
 
 	// don't drop the floor if bound to another entity
-	if ( GetBindMaster() != NULL && GetBindMaster() != this ) {
+	if( GetBindMaster() != NULL && GetBindMaster() != this )
+	{
 		return;
 	}
 
@@ -527,16 +595,19 @@ void idItem::Event_DropToFloor( void ) {
 idItem::Event_Touch
 ================
 */
-void idItem::Event_Touch( idEntity *other, trace_t *trace ) {
-	if ( !other->IsType( idPlayer::Type ) ) {
+void idItem::Event_Touch( idEntity* other, trace_t* trace )
+{
+	if( !other->IsType( idPlayer::Type ) )
+	{
 		return;
 	}
 
-	if ( !canPickUp ) {
+	if( !canPickUp )
+	{
 		return;
 	}
 
-	Pickup( static_cast<idPlayer *>(other) );
+	Pickup( static_cast<idPlayer*>( other ) );
 }
 
 /*
@@ -544,15 +615,18 @@ void idItem::Event_Touch( idEntity *other, trace_t *trace ) {
 idItem::Event_Trigger
 ================
 */
-void idItem::Event_Trigger( idEntity *activator ) {
+void idItem::Event_Trigger( idEntity* activator )
+{
 
-	if ( !canPickUp && spawnArgs.GetBool( "triggerFirst" ) ) {
+	if( !canPickUp && spawnArgs.GetBool( "triggerFirst" ) )
+	{
 		canPickUp = true;
 		return;
 	}
 
-	if ( activator && activator->IsType( idPlayer::Type ) ) {
-		Pickup( static_cast<idPlayer *>( activator ) );
+	if( activator && activator->IsType( idPlayer::Type ) )
+	{
+		Pickup( static_cast<idPlayer*>( activator ) );
 	}
 }
 
@@ -561,7 +635,8 @@ void idItem::Event_Trigger( idEntity *activator ) {
 idItem::Event_Respawn
 ================
 */
-void idItem::Event_Respawn( void ) {
+void idItem::Event_Respawn()
+{
 	BecomeActive( TH_THINK );
 	Show();
 	inViewTime = -1000;
@@ -577,9 +652,11 @@ void idItem::Event_Respawn( void ) {
 idItem::Event_RespawnFx
 ================
 */
-void idItem::Event_RespawnFx( void ) {
-	const char *sfx = spawnArgs.GetString( "fxRespawn" );
-	if ( sfx && *sfx ) {
+void idItem::Event_RespawnFx()
+{
+	const char* sfx = spawnArgs.GetString( "fxRespawn" );
+	if( sfx && *sfx )
+	{
 		idEntityFx::StartFx( sfx, NULL, NULL, this, true );
 	}
 }
@@ -589,13 +666,13 @@ void idItem::Event_RespawnFx( void ) {
 ===============================================================================
 
   idMoveableItem
-	
+
 ===============================================================================
 */
 
 CLASS_DECLARATION( idItem, idMoveableItem )
-	EVENT( EV_DropToFloor,	idMoveableItem::Event_DropToFloor )
-	EVENT( EV_Gib,			idMoveableItem::Event_Gib )
+EVENT( EV_DropToFloor,	idMoveableItem::Event_DropToFloor )
+EVENT( EV_Gib,			idMoveableItem::Event_Gib )
 END_CLASS
 
 /*
@@ -603,7 +680,8 @@ END_CLASS
 idMoveableItem::idMoveableItem
 ================
 */
-idMoveableItem::idMoveableItem() {
+idMoveableItem::idMoveableItem()
+{
 	trigger = NULL;
 	smoke = NULL;
 	smokeTime = 0;
@@ -617,8 +695,10 @@ idMoveableItem::idMoveableItem() {
 idMoveableItem::~idMoveableItem
 ================
 */
-idMoveableItem::~idMoveableItem() {
-	if ( trigger ) {
+idMoveableItem::~idMoveableItem()
+{
+	if( trigger )
+	{
 		delete trigger;
 	}
 }
@@ -628,8 +708,9 @@ idMoveableItem::~idMoveableItem() {
 idMoveableItem::Save
 ================
 */
-void idMoveableItem::Save( idSaveGame *savefile ) const {
-   	savefile->WriteStaticObject( physicsObj );
+void idMoveableItem::Save( idSaveGame* savefile ) const
+{
+	savefile->WriteStaticObject( physicsObj );
 
 	savefile->WriteClipModel( trigger );
 
@@ -644,7 +725,8 @@ void idMoveableItem::Save( idSaveGame *savefile ) const {
 idMoveableItem::Restore
 ================
 */
-void idMoveableItem::Restore( idRestoreGame *savefile ) {
+void idMoveableItem::Restore( idRestoreGame* savefile )
+{
 	savefile->ReadStaticObject( physicsObj );
 	RestorePhysics( &physicsObj );
 
@@ -661,7 +743,8 @@ void idMoveableItem::Restore( idRestoreGame *savefile ) {
 idMoveableItem::Spawn
 ================
 */
-void idMoveableItem::Spawn( void ) {
+void idMoveableItem::Spawn()
+{
 	idTraceModel trm;
 	float density, friction, bouncyness, tsize;
 	idStr clipModelName;
@@ -675,18 +758,21 @@ void idMoveableItem::Spawn( void ) {
 
 	// check if a clip model is set
 	spawnArgs.GetString( "clipmodel", "", clipModelName );
-	if ( !clipModelName[0] ) {
+	if( !clipModelName[0] )
+	{
 		clipModelName = spawnArgs.GetString( "model" );		// use the visual model
 	}
 
 	// load the trace model
-	if ( !collisionModelManager->TrmFromModel( clipModelName, trm ) ) {
+	if( !collisionModelManager->TrmFromModel( clipModelName, trm ) )
+	{
 		gameLocal.Error( "idMoveableItem '%s': cannot load collision model %s", name.c_str(), clipModelName.c_str() );
 		return;
 	}
 
 	// if the model should be shrinked
-	if ( spawnArgs.GetBool( "clipshrink" ) ) {
+	if( spawnArgs.GetBool( "clipshrink" ) )
+	{
 		trm.Shrink( CM_CLIP_EPSILON );
 	}
 
@@ -706,7 +792,7 @@ void idMoveableItem::Spawn( void ) {
 	physicsObj.SetBouncyness( bouncyness );
 	physicsObj.SetFriction( 0.6f, 0.6f, friction );
 	physicsObj.SetGravity( gameLocal.GetGravity() );
-// ---> sikk - We want moveable items to clip with other items and we also want ragdolls to clip with items 
+// ---> sikk - We want moveable items to clip with other items and we also want ragdolls to clip with items
 	//physicsObj.SetContents( CONTENTS_RENDERMODEL );
 	physicsObj.SetClipMask( MASK_SOLID | CONTENTS_MOVEABLECLIP );
 	physicsObj.SetContents( CONTENTS_RENDERMODEL | CONTENTS_CORPSE );
@@ -719,9 +805,10 @@ void idMoveableItem::Spawn( void ) {
 
 	nextSoundTime = 0;	// sikk - Moveable Items Collision Sound
 
-	const char *smokeName = spawnArgs.GetString( "smoke_trail" );
-	if ( *smokeName != '\0' ) {
-		smoke = static_cast<const idDeclParticle *>( declManager->FindType( DECL_PARTICLE, smokeName ) );
+	const char* smokeName = spawnArgs.GetString( "smoke_trail" );
+	if( *smokeName != '\0' )
+	{
+		smoke = static_cast<const idDeclParticle*>( declManager->FindType( DECL_PARTICLE, smokeName ) );
 		smokeTime = gameLocal.time;
 		BecomeActive( TH_UPDATEPARTICLES );
 	}
@@ -734,23 +821,28 @@ void idMoveableItem::Spawn( void ) {
 idMoveableItem::Think
 ================
 */
-void idMoveableItem::Think( void ) {
+void idMoveableItem::Think()
+{
 	RunPhysics();
 
-	if ( thinkFlags & TH_PHYSICS ) {
+	if( thinkFlags & TH_PHYSICS )
+	{
 		// update trigger position
 		trigger->Link( gameLocal.clip, this, 0, GetPhysics()->GetOrigin(), mat3_identity );
 	}
 
 // ---> sikk - Moveable Item Spinning
-	if ( thinkFlags & TH_THINK ) {
-		if ( spawnArgs.GetBool( "spin" ) || spawnArgs.GetBool( "fixedAxis" ) ) {
+	if( thinkFlags & TH_THINK )
+	{
+		if( spawnArgs.GetBool( "spin" ) || spawnArgs.GetBool( "fixedAxis" ) )
+		{
 			idMat3 axis;
 			axis.Identity();
 			GetPhysics()->SetAngularVelocity( vec3_zero );
 			GetPhysics()->SetAxis( axis );
 
-			if ( spawnArgs.GetBool( "spin" ) ) {
+			if( spawnArgs.GetBool( "spin" ) )
+			{
 				idAngles	ang;
 				idVec3		org;
 
@@ -769,12 +861,17 @@ void idMoveableItem::Think( void ) {
 	}
 // <--- sikk - Moveable Item Spinning
 
-	if ( thinkFlags & TH_UPDATEPARTICLES ) {
-		if ( !gameLocal.smokeParticles->EmitSmoke( smoke, smokeTime, gameLocal.random.CRandomFloat(), GetPhysics()->GetOrigin(), GetPhysics()->GetAxis() ) ) {
+	if( thinkFlags & TH_UPDATEPARTICLES )
+	{
+		if( !gameLocal.smokeParticles->EmitSmoke( smoke, smokeTime, gameLocal.random.CRandomFloat(), GetPhysics()->GetOrigin(), GetPhysics()->GetAxis() ) )
+		{
 // ---> sikk - continuous smoke particles (for gibs)
-			if ( repeatSmoke && GetPhysics()->GetLinearVelocity().Length() > 100.0f ) {
+			if( repeatSmoke && GetPhysics()->GetLinearVelocity().Length() > 100.0f )
+			{
 				smokeTime = gameLocal.time;
-			} else {
+			}
+			else
+			{
 				smokeTime = 0;
 				BecomeInactive( TH_UPDATEPARTICLES );
 			}
@@ -792,13 +889,16 @@ void idMoveableItem::Think( void ) {
 idMoveableItem::Collide
 =================
 */
-bool idMoveableItem::Collide( const trace_t &collision, const idVec3 &velocity ) {
+bool idMoveableItem::Collide( const trace_t& collision, const idVec3& velocity )
+{
 	float v, f;
 
 	v = -( velocity * collision.c.normal );
-	if ( v > 80 && gameLocal.time > nextSoundTime ) {
+	if( v > 80 && gameLocal.time > nextSoundTime )
+	{
 		f = v > 200 ? 1.0f : idMath::Sqrt( v - 80 ) * 0.091f;
-		if ( StartSound( "snd_bounce", SND_CHANNEL_ANY, 0, false, NULL ) ) {
+		if( StartSound( "snd_bounce", SND_CHANNEL_ANY, 0, false, NULL ) )
+		{
 			// don't set the volume unless there is a bounce sound as it overrides the entire channel
 			// which causes footsteps on ai's to not honor their shader parms
 			SetSoundVolume( f );
@@ -815,11 +915,13 @@ bool idMoveableItem::Collide( const trace_t &collision, const idVec3 &velocity )
 idMoveableItem::Pickup
 ================
 */
-bool idMoveableItem::Pickup( idPlayer *player ) {
+bool idMoveableItem::Pickup( idPlayer* player )
+{
 	bool ret = idItem::Pickup( player );
-	if ( ret ) {
+	if( ret )
+	{
 		trigger->SetContents( 0 );
-	} 
+	}
 	return ret;
 }
 
@@ -828,9 +930,10 @@ bool idMoveableItem::Pickup( idPlayer *player ) {
 idMoveableItem::DropItem
 ================
 */
-idEntity *idMoveableItem::DropItem( const char *classname, const idVec3 &origin, const idMat3 &axis, const idVec3 &velocity, int activateDelay, int removeDelay ) {
+idEntity* idMoveableItem::DropItem( const char* classname, const idVec3& origin, const idMat3& axis, const idVec3& velocity, int activateDelay, int removeDelay )
+{
 	idDict args;
-	idEntity *item;
+	idEntity* item;
 
 	args.Set( "classname", classname );
 	args.Set( "dropped", "1" );
@@ -838,21 +941,25 @@ idEntity *idMoveableItem::DropItem( const char *classname, const idVec3 &origin,
 	// we sometimes drop idMoveables here, so set 'nodrop' to 1 so that it doesn't get put on the floor
 	args.Set( "nodrop", "1" );
 
-	if ( activateDelay ) {
+	if( activateDelay )
+	{
 		args.SetBool( "triggerFirst", true );
 	}
 
 	gameLocal.SpawnEntityDef( args, &item );
-	if ( item ) {
+	if( item )
+	{
 		// set item position
 		item->GetPhysics()->SetOrigin( origin );
 		item->GetPhysics()->SetAxis( axis );
 		item->GetPhysics()->SetLinearVelocity( velocity );
 		item->UpdateVisuals();
-		if ( activateDelay ) {
+		if( activateDelay )
+		{
 			item->PostEventMS( &EV_Activate, activateDelay, item );
 		}
-		if ( !removeDelay ) {
+		if( !removeDelay )
+		{
 			removeDelay = SEC2MS( 5 * 60 );
 		}
 		// always remove a dropped item after 5 minutes in case it dropped to an unreachable location
@@ -879,22 +986,25 @@ idMoveableItem::DropItems
   where <X> is an aribtrary string.
 ================
 */
-void idMoveableItem::DropItems( idAnimatedEntity  *ent, const char *type, idList<idEntity *> *list ) {
-	const idKeyValue *kv;
-	const char *skinName, *c, *jointName;
+void idMoveableItem::DropItems( idAnimatedEntity*  ent, const char* type, idList<idEntity*>* list )
+{
+	const idKeyValue* kv;
+	const char* skinName, *c, *jointName;
 	idStr key, key2;
 	idVec3 origin;
 	idMat3 axis;
 	idAngles angles;
-	const idDeclSkin *skin;
+	const idDeclSkin* skin;
 	jointHandle_t joint;
-	idEntity *item;
+	idEntity* item;
 
 	// drop all items
 	kv = ent->spawnArgs.MatchPrefix( va( "def_drop%sItem", type ), NULL );
-	while ( kv ) {
+	while( kv )
+	{
 		c = kv->GetKey().c_str() + kv->GetKey().Length();
-		if ( idStr::Icmp( c - 5, "Joint" ) != 0 && idStr::Icmp( c - 8, "Rotation" ) != 0 ) {
+		if( idStr::Icmp( c - 5, "Joint" ) != 0 && idStr::Icmp( c - 8, "Rotation" ) != 0 )
+		{
 
 			key = kv->GetKey().c_str() + 4;
 			key2 = key;
@@ -902,15 +1012,19 @@ void idMoveableItem::DropItems( idAnimatedEntity  *ent, const char *type, idList
 			key2 += "Offset";
 			jointName = ent->spawnArgs.GetString( key );
 			joint = ent->GetAnimator()->GetJointHandle( jointName );
-			if ( !ent->GetJointWorldTransform( joint, gameLocal.time, origin, axis ) ) {
+			if( !ent->GetJointWorldTransform( joint, gameLocal.time, origin, axis ) )
+			{
 				gameLocal.Warning( "%s refers to invalid joint '%s' on entity '%s'\n", key.c_str(), jointName, ent->name.c_str() );
 				origin = ent->GetPhysics()->GetOrigin();
 				axis = ent->GetPhysics()->GetAxis();
 			}
-			if ( g_dropItemRotation.GetString()[0] ) {
+			if( g_dropItemRotation.GetString()[0] )
+			{
 				angles.Zero();
 				sscanf( g_dropItemRotation.GetString(), "%f %f %f", &angles.pitch, &angles.yaw, &angles.roll );
-			} else {
+			}
+			else
+			{
 				key = kv->GetKey().c_str() + 4;
 				key += "Rotation";
 				ent->spawnArgs.GetAngles( key, "0 0 0", angles );
@@ -920,7 +1034,8 @@ void idMoveableItem::DropItems( idAnimatedEntity  *ent, const char *type, idList
 			origin += ent->spawnArgs.GetVector( key2, "0 0 0" );
 
 			item = DropItem( kv->GetValue(), origin, axis, vec3_origin, 0, 0 );
-			if ( list && item ) {
+			if( list && item )
+			{
 				list->Append( item );
 			}
 		}
@@ -930,7 +1045,8 @@ void idMoveableItem::DropItems( idAnimatedEntity  *ent, const char *type, idList
 
 	// change the skin to hide all items
 	skinName = ent->spawnArgs.GetString( va( "skin_drop%s", type ) );
-	if ( skinName[0] ) {
+	if( skinName[0] )
+	{
 		skin = declManager->FindSkin( skinName );
 		ent->SetSkin( skin );
 	}
@@ -955,18 +1071,20 @@ idMoveableItem::DropRandomItems
   where <X> is an aribtrary string.
 ================
 */
-void idMoveableItem::DropRandomItems( idAnimatedEntity  *ent, const char *type, idList<idEntity *> *list ) {
-	const idKeyValue *kv;
+void idMoveableItem::DropRandomItems( idAnimatedEntity*  ent, const char* type, idList<idEntity*>* list )
+{
+	const idKeyValue* kv;
 	idStr key;
 	idVec3 origin;
 	idVec3 offset;
 	idMat3 axis;
 	idAngles angles;
-	idEntity *item;
+	idEntity* item;
 
 	int num = 0;
 	kv = ent->spawnArgs.MatchPrefix( va( "def_drop%sItem", type ), NULL );
-	while ( kv ) {
+	while( kv )
+	{
 		num++;
 		kv = ent->spawnArgs.MatchPrefix( va( "def_drop%sItem", type ), kv );
 	}
@@ -975,8 +1093,10 @@ void idMoveableItem::DropRandomItems( idAnimatedEntity  *ent, const char *type, 
 	float pct = 1.0f / ( ent->spawnArgs.GetFloat( "dropRandomItemNum" ) + 1.0f );
 	float f = pct;
 	kv = ent->spawnArgs.MatchPrefix( va( "drop%sItemOffset", type ), NULL );
-	while ( kv ) {
-		if ( f < gameLocal.random.RandomFloat() ) {
+	while( kv )
+	{
+		if( f < gameLocal.random.RandomFloat() )
+		{
 			key = kv->GetKey();
 			ent->spawnArgs.GetVector( key, "0 0 0", offset );
 			origin = ent->GetPhysics()->GetAbsBounds().GetCenter() + offset;
@@ -985,14 +1105,15 @@ void idMoveableItem::DropRandomItems( idAnimatedEntity  *ent, const char *type, 
 			axis = angles.ToMat3() * axis;
 
 			int n = gameLocal.random.RandomInt( num ) + 1;
-			
+
 			item = DropItem( ent->spawnArgs.GetString( va( "def_drop%sItem%i", type, n ) ), origin, axis, vec3_origin, 0, 0 );
-			if ( list && item ) {
+			if( list && item )
+			{
 				list->Append( item );
 			}
 		}
 		f += pct;
-	
+
 		kv = ent->spawnArgs.MatchPrefix( va( "drop%sItemOffset", type ), kv );
 	}
 }
@@ -1003,11 +1124,13 @@ void idMoveableItem::DropRandomItems( idAnimatedEntity  *ent, const char *type, 
 idMoveableItem::Gib
 ============
 */
-void idMoveableItem::Gib( const idVec3 &dir, const char *damageDefName ) {
+void idMoveableItem::Gib( const idVec3& dir, const char* damageDefName )
+{
 	// spawn smoke puff
-	const char *smokeName = spawnArgs.GetString( "smoke_gib" );
-	if ( *smokeName != '\0' ) {
-		const idDeclParticle *smoke = static_cast<const idDeclParticle *>( declManager->FindType( DECL_PARTICLE, smokeName ) );
+	const char* smokeName = spawnArgs.GetString( "smoke_gib" );
+	if( *smokeName != '\0' )
+	{
+		const idDeclParticle* smoke = static_cast<const idDeclParticle*>( declManager->FindType( DECL_PARTICLE, smokeName ) );
 		gameLocal.smokeParticles->EmitSmoke( smoke, gameLocal.time, gameLocal.random.CRandomFloat(), renderEntity.origin, renderEntity.axis );
 	}
 	// remove the entity
@@ -1019,7 +1142,8 @@ void idMoveableItem::Gib( const idVec3 &dir, const char *damageDefName ) {
 idMoveableItem::Event_DropToFloor
 ================
 */
-void idMoveableItem::Event_DropToFloor( void ) {
+void idMoveableItem::Event_DropToFloor()
+{
 	// the physics will drop the moveable to the floor
 }
 
@@ -1028,7 +1152,8 @@ void idMoveableItem::Event_DropToFloor( void ) {
 idMoveableItem::Event_Gib
 ============
 */
-void idMoveableItem::Event_Gib( const char *damageDefName ) {
+void idMoveableItem::Event_Gib( const char* damageDefName )
+{
 	Gib( idVec3( 0, 0, 1 ), damageDefName );
 }
 
@@ -1042,7 +1167,7 @@ void idMoveableItem::Event_Gib( const char *damageDefName ) {
 */
 
 CLASS_DECLARATION( idEntity, idItemRemover )
-	EVENT( EV_Activate,		idItemRemover::Event_Trigger )
+EVENT( EV_Activate,		idItemRemover::Event_Trigger )
 END_CLASS
 
 /*
@@ -1050,7 +1175,8 @@ END_CLASS
 idItemRemover::Spawn
 ================
 */
-void idItemRemover::Spawn( void ) {
+void idItemRemover::Spawn()
+{
 }
 
 /*
@@ -1058,9 +1184,10 @@ void idItemRemover::Spawn( void ) {
 idItemRemover::RemoveItem
 ================
 */
-void idItemRemover::RemoveItem( idPlayer *player ) {
-	const char *remove;
-	
+void idItemRemover::RemoveItem( idPlayer* player )
+{
+	const char* remove;
+
 	remove = spawnArgs.GetString( "remove" );
 	player->RemoveInventoryItem( remove );
 }
@@ -1070,8 +1197,10 @@ void idItemRemover::RemoveItem( idPlayer *player ) {
 idItemRemover::Event_Trigger
 ================
 */
-void idItemRemover::Event_Trigger( idEntity *activator ) {
-	if ( activator->IsType( idPlayer::Type ) ) {
-		RemoveItem( static_cast<idPlayer *>(activator) );
+void idItemRemover::Event_Trigger( idEntity* activator )
+{
+	if( activator->IsType( idPlayer::Type ) )
+	{
+		RemoveItem( static_cast<idPlayer*>( activator ) );
 	}
 }

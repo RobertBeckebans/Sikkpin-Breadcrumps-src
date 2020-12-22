@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,14 +41,14 @@ const int USERCMD_HZ			= 60;			// 60 frames per second
 const int USERCMD_MSEC			= 1000 / USERCMD_HZ;
 
 // usercmd_t->button bits
-const int BUTTON_ATTACK			= BIT(0);
-const int BUTTON_RUN			= BIT(1);
-const int BUTTON_ZOOM			= BIT(2);
-const int BUTTON_SCORES			= BIT(3);
-const int BUTTON_MLOOK			= BIT(4);
-const int BUTTON_5				= BIT(5);
-const int BUTTON_6				= BIT(6);
-const int BUTTON_7				= BIT(7);
+const int BUTTON_ATTACK			= BIT( 0 );
+const int BUTTON_RUN			= BIT( 1 );
+const int BUTTON_ZOOM			= BIT( 2 );
+const int BUTTON_SCORES			= BIT( 3 );
+const int BUTTON_MLOOK			= BIT( 4 );
+const int BUTTON_5				= BIT( 5 );
+const int BUTTON_6				= BIT( 6 );
+const int BUTTON_7				= BIT( 7 );
 
 // usercmd_t->impulse commands
 const int IMPULSE_0				= 0;			// weap 0
@@ -86,7 +86,8 @@ const int IMPULSE_40			= 40;			// use vehicle
 // usercmd_t->flags
 const int UCF_IMPULSE_SEQUENCE	= 0x0001;		// toggled every time an impulse command is sent
 
-class usercmd_t {
+class usercmd_t
+{
 public:
 	int			gameFrame;						// frame number
 	int			gameTime;						// game time
@@ -104,34 +105,36 @@ public:
 
 public:
 	void		ByteSwap();						// on big endian systems, byte swap the shorts and ints
-	bool		operator==( const usercmd_t &rhs ) const;
+	bool		operator==( const usercmd_t& rhs ) const;
 };
 
-typedef enum {
+typedef enum
+{
 	INHIBIT_SESSION = 0,
 	INHIBIT_ASYNC
 } inhibit_t;
 
 const int MAX_BUFFERED_USERCMD = 64;
 
-class idUsercmdGen {
+class idUsercmdGen
+{
 public:
-	virtual				~idUsercmdGen( void ) {}
+	virtual				~idUsercmdGen() {}
 
 	// Sets up all the cvars and console commands.
-	virtual	void		Init( void ) = 0;
+	virtual	void		Init() = 0;
 
 	// Prepares for a new map.
-	virtual void		InitForNewMap( void ) = 0;
+	virtual void		InitForNewMap() = 0;
 
 	// Shut down.
-	virtual void		Shutdown( void ) = 0;
+	virtual void		Shutdown() = 0;
 
 	// Clears all key states and face straight.
-	virtual	void		Clear( void ) = 0;
+	virtual	void		Clear() = 0;
 
 	// Clears view angles.
-	virtual void		ClearAngles( void ) = 0;
+	virtual void		ClearAngles() = 0;
 
 	// When the console is down or the menu is up, only emit default usercmd, so the player isn't moving around.
 	// Each subsystem (session and game) may want an inhibit will OR the requests.
@@ -141,19 +144,19 @@ public:
 	virtual usercmd_t	TicCmd( int ticNumber ) = 0;
 
 	// Called async at regular intervals.
-	virtual	void		UsercmdInterrupt( void ) = 0;
+	virtual	void		UsercmdInterrupt() = 0;
 
 	// Set a value that can safely be referenced by UsercmdInterrupt() for each key binding.
-	virtual	int			CommandStringUsercmdData( const char *cmdString ) = 0;
+	virtual	int			CommandStringUsercmdData( const char* cmdString ) = 0;
 
 	// Returns the number of user commands.
-	virtual int			GetNumUserCommands( void ) = 0;
+	virtual int			GetNumUserCommands() = 0;
 
 	// Returns the name of a user command via index.
-	virtual const char *GetUserCommandName( int index ) = 0;
+	virtual const char* GetUserCommandName( int index ) = 0;
 
 	// Continuously modified, never reset. For full screen guis.
-	virtual void		MouseState( int *x, int *y, int *button, bool *down ) = 0;
+	virtual void		MouseState( int* x, int* y, int* button, bool* down ) = 0;
 
 	// Directly sample a button.
 	virtual int			ButtonState( int key ) = 0;
@@ -162,9 +165,9 @@ public:
 	virtual int			KeyState( int key ) = 0;
 
 	// Directly sample a usercmd.
-	virtual usercmd_t	GetDirectUsercmd( void ) = 0;
+	virtual usercmd_t	GetDirectUsercmd() = 0;
 };
 
-extern idUsercmdGen	*usercmdGen;
+extern idUsercmdGen*	usercmdGen;
 
 #endif /* !__USERCMDGEN_H__ */

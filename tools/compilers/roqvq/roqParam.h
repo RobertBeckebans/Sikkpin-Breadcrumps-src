@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,32 +34,32 @@ If you have questions concerning this license or the applicable additional terms
 class roqParam
 {
 public:
-	
-	const char*		RoqFilename( void );
-	const char*		RoqTempFilename( void );
-	const char*		GetNextImageFilename( void );
-	const char*		SoundFilename( void );
-	void			InitFromFile( const char *fileName );
-	void			GetNthInputFileName( idStr &fileName, int n);
-	bool			MoreFrames( void );
-	bool			OutputVectors( void );
-	bool			Timecode( void );
-	bool			DeltaFrames( void );
-	bool			NoAlpha( void );
-	bool			SearchType( void );
-	bool			TwentyFourToThirty( void );
-	bool			HasSound( void );
-	int				NumberOfFrames( void );
-	int				NormalFrameSize( void );
-	int				FirstFrameSize( void );
-	int				JpegQuality( void );
-	bool			IsScaleable( void );
+
+	const char*		RoqFilename();
+	const char*		RoqTempFilename();
+	const char*		GetNextImageFilename();
+	const char*		SoundFilename();
+	void			InitFromFile( const char* fileName );
+	void			GetNthInputFileName( idStr& fileName, int n );
+	bool			MoreFrames();
+	bool			OutputVectors();
+	bool			Timecode();
+	bool			DeltaFrames();
+	bool			NoAlpha();
+	bool			SearchType();
+	bool			TwentyFourToThirty();
+	bool			HasSound();
+	int				NumberOfFrames();
+	int				NormalFrameSize();
+	int				FirstFrameSize();
+	int				JpegQuality();
+	bool			IsScaleable();
 
 	idStr			outputFilename;
 	int				numInputFiles;
 private:
-	int				*range;
-	bool			*padding, *padding2;
+	int*				range;
+	bool*			padding, *padding2;
 	idStrList		file;
 	idStrList		file2;
 	idStr			soundfile;
@@ -68,11 +68,11 @@ private:
 	idStr			startPal;
 	idStr			endPal;
 	idStr			currentFile;
-	int				*skipnum, *skipnum2;
-	int				*startnum, *startnum2;
-	int				*endnum, *endnum2;
-	int				*numpadding, *numpadding2;
-	int				*numfiles;
+	int*				skipnum, *skipnum2;
+	int*				startnum, *startnum2;
+	int*				endnum, *endnum2;
+	int*				numpadding, *numpadding2;
+	int*				numfiles;
 	byte			keyR, keyG, keyB;
 	int				field;
 	int				realnum;

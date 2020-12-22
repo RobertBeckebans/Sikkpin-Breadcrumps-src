@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,31 +35,40 @@ If you have questions concerning this license or the applicable additional terms
 #include "zclip.h"
 
 
-CZClip::CZClip( void ) {	
-	LONG 
+CZClip::CZClip()
+{
+	LONG
 	lSize = sizeof( m_bEnabled );
-	if ( !LoadRegistryInfo( "radiant_ZClipEnabled", &m_bEnabled, &lSize ) )
+	if( !LoadRegistryInfo( "radiant_ZClipEnabled", &m_bEnabled, &lSize ) )
+	{
 		m_bEnabled = false;
+	}
 
 	lSize = sizeof( m_iZClipTop );
-	if ( !LoadRegistryInfo( "radiant_ZClipTop", &m_iZClipTop, &lSize ) )
+	if( !LoadRegistryInfo( "radiant_ZClipTop", &m_iZClipTop, &lSize ) )
+	{
 		m_iZClipTop = 64;
+	}
 
 	lSize = sizeof( m_iZClipBottom );
-	if ( !LoadRegistryInfo( "radiant_ZClipBottom", &m_iZClipBottom, &lSize ) )
+	if( !LoadRegistryInfo( "radiant_ZClipBottom", &m_iZClipBottom, &lSize ) )
+	{
 		m_iZClipBottom = -64;
+	}
 
 	Legalise();
 }
 
-CZClip::~CZClip( void ) {
+CZClip::~CZClip()
+{
 	// TODO: registry save
-	SaveRegistryInfo( "radiant_ZClipEnabled", &m_bEnabled, sizeof(m_bEnabled ) );
+	SaveRegistryInfo( "radiant_ZClipEnabled", &m_bEnabled, sizeof( m_bEnabled ) );
 	SaveRegistryInfo( "radiant_ZClipTop", &m_iZClipTop, sizeof( m_iZClipTop ) );
 	SaveRegistryInfo( "radiant_ZClipBottom", &m_iZClipBottom, sizeof( m_iZClipBottom ) );
 }
 
-void CZClip::Reset( void ) {
+void CZClip::Reset()
+{
 	m_iZClipTop		= 64;		// arb. starting values, but must be at least 64 apart
 	m_iZClipBottom	= -64;
 	m_bEnabled		= false;
@@ -67,10 +76,12 @@ void CZClip::Reset( void ) {
 	Legalise();
 }
 
-void CZClip::Legalise( void ) {
+void CZClip::Legalise()
+{
 	// need swapping?
 	//
-	if ( m_iZClipTop < m_iZClipBottom ) {
+	if( m_iZClipTop < m_iZClipBottom )
+	{
 		int iTemp = m_iZClipTop;
 		m_iZClipTop = m_iZClipBottom;
 		m_iZClipBottom = iTemp;
@@ -79,22 +90,26 @@ void CZClip::Legalise( void ) {
 	// too close together?
 	//
 #define ZCLIP_MIN_SPACING 64
-	if ( abs( m_iZClipTop - m_iZClipBottom ) < ZCLIP_MIN_SPACING ) {
+	if( abs( m_iZClipTop - m_iZClipBottom ) < ZCLIP_MIN_SPACING )
+	{
 		m_iZClipBottom = m_iZClipTop - ZCLIP_MIN_SPACING;
 	}
 }
 
-void CZClip::SetTop( int iNewZ ) {
+void CZClip::SetTop( int iNewZ )
+{
 	m_iZClipTop = iNewZ;
-	Legalise();		
+	Legalise();
 }
 
-void CZClip::SetBottom( int iNewZ ) {
+void CZClip::SetBottom( int iNewZ )
+{
 	m_iZClipBottom = iNewZ;
 	Legalise();
 }
 
-bool CZClip::Enable( bool bOnOff ) {
+bool CZClip::Enable( bool bOnOff )
+{
 	m_bEnabled = !m_bEnabled;
 	return IsEnabled();
 }
@@ -102,7 +117,8 @@ bool CZClip::Enable( bool bOnOff ) {
 #define ZCLIP_BAR_THICKNESS 8
 #define ZCLIP_ARROWHEIGHT (ZCLIP_BAR_THICKNESS*8)
 
-void CZClip::Paint( void ) {
+void CZClip::Paint()
+{
 	float x, y;
 	float scale = 1.0f / z.scale;	// sikk - Keep z clip icons proportional to window	// hmmm, a rather unpleasant and obscure global name, but it was already called that so...
 
@@ -112,9 +128,12 @@ void CZClip::Paint( void ) {
 	y = m_iZClipTop;
 
 	qglColor3f( ZCLIP_COLOUR );//1.0, 0.0, 1.0);
-	if ( m_bEnabled ) {
+	if( m_bEnabled )
+	{
 		qglBegin( GL_QUADS );
-	} else {
+	}
+	else
+	{
 		qglBegin( GL_LINE_LOOP );
 	}
 	qglVertex3f( x - ZCLIP_BAR_THICKNESS * scale, y, 0 );
@@ -124,9 +143,12 @@ void CZClip::Paint( void ) {
 	qglEnd();
 
 	qglColor3f( ZCLIP_COLOUR_DIM );//0.8, 0.0, 0.8);
-	if ( m_bEnabled ) {
+	if( m_bEnabled )
+	{
 		qglBegin( GL_TRIANGLES );
-	} else {
+	}
+	else
+	{
 		qglBegin( GL_LINE_LOOP );
 	}
 	qglVertex3f( x, y + ZCLIP_BAR_THICKNESS * scale, 0 );
@@ -140,21 +162,27 @@ void CZClip::Paint( void ) {
 	y = m_iZClipBottom;
 
 	qglColor3f( ZCLIP_COLOUR );//1.0, 0.0, 1.0);
-	if ( m_bEnabled ) {
+	if( m_bEnabled )
+	{
 		qglBegin( GL_QUADS );
-	} else {
+	}
+	else
+	{
 		qglBegin( GL_LINE_LOOP );
 	}
-	qglVertex3f( x - ZCLIP_BAR_THICKNESS * scale, y, 0);
+	qglVertex3f( x - ZCLIP_BAR_THICKNESS * scale, y, 0 );
 	qglVertex3f( x - ZCLIP_BAR_THICKNESS * scale, y - ZCLIP_BAR_THICKNESS * scale, 0 );
 	qglVertex3f( x + ZCLIP_BAR_THICKNESS * scale, y - ZCLIP_BAR_THICKNESS * scale, 0 );
-	qglVertex3f( x + ZCLIP_BAR_THICKNESS * scale, y, 0);
+	qglVertex3f( x + ZCLIP_BAR_THICKNESS * scale, y, 0 );
 	qglEnd();
 
 	qglColor3f( ZCLIP_COLOUR_DIM );//0.8, 0.0, 0.8);
-	if ( m_bEnabled ) {
+	if( m_bEnabled )
+	{
 		qglBegin( GL_TRIANGLES );
-	} else {
+	}
+	else
+	{
 		qglBegin( GL_LINE_LOOP );
 	}
 	qglVertex3f( x, y - ZCLIP_BAR_THICKNESS * scale, 0 );

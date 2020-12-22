@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,7 +40,8 @@ z_t z;
     Z_Init
  =======================================================================================================================
  */
-void Z_Init( void ) {
+void Z_Init()
+{
 	z.origin[0] = 0;
 	z.origin[1] = 20;
 	z.origin[2] = 46;
@@ -56,9 +57,10 @@ static int	cursorx, cursory;
     Z_MouseDown
  =======================================================================================================================
  */
-void Z_MouseDown( int x, int y, int buttons ) {
+void Z_MouseDown( int x, int y, int buttons )
+{
 	idVec3	org, dir, vup, vright;
-	brush_t *b;
+	brush_t* b;
 
 	Sys_GetCursorPos( &cursorx, &cursory );
 
@@ -71,7 +73,8 @@ void Z_MouseDown( int x, int y, int buttons ) {
 	org[1] = MIN_WORLD_COORD;
 
 	b = selected_brushes.next;
-	if ( b != &selected_brushes ) {
+	if( b != &selected_brushes )
+	{
 		org[0] = ( b->mins[0] + b->maxs[0] ) / 2;
 	}
 
@@ -86,47 +89,55 @@ void Z_MouseDown( int x, int y, int buttons ) {
 
 	// new mouse code for ZClip, I'll do this stuff before falling through into the standard ZWindow mouse code...
 	//
-	if ( g_pParentWnd->GetZWnd()->m_pZClip ) {	// should always be the case I think, but this is safer
+	if( g_pParentWnd->GetZWnd()->m_pZClip )  	// should always be the case I think, but this is safer
+	{
 		bool bToggle = false;
 		bool bSetTop = false;
 		bool bSetBot = false;
 		bool bReset  = false;
 
-		if ( g_PrefsDlg.m_nMouseButtons == 2 ) {
+		if( g_PrefsDlg.m_nMouseButtons == 2 )
+		{
 			// 2 button mice...
 			bToggle = ( GetKeyState( VK_F1 ) & 0x8000 ) != 0;
 			bSetTop = ( GetKeyState( VK_F2 ) & 0x8000 ) != 0;
 			bSetBot = ( GetKeyState( VK_F3 ) & 0x8000 ) != 0;
 			bReset  = ( GetKeyState( VK_F4 ) & 0x8000 ) != 0;
-		} else {	
+		}
+		else
+		{
 			// 3 button mice...
 			bToggle = ( buttons == ( MK_RBUTTON | MK_SHIFT | MK_CONTROL ) );
 			bSetTop = ( buttons == ( MK_RBUTTON | MK_SHIFT ) );
 			bSetBot = ( buttons == ( MK_RBUTTON | MK_CONTROL ) );
 			bReset  = ( GetKeyState( VK_F4 ) & 0x8000 ) != 0;
-		}				
-		
-		if ( bToggle ) {
+		}
+
+		if( bToggle )
+		{
 			g_pParentWnd->GetZWnd()->m_pZClip->Enable( !( g_pParentWnd->GetZWnd()->m_pZClip->IsEnabled() ) );
-		    Sys_UpdateWindows( W_ALL );
+			Sys_UpdateWindows( W_ALL );
 			return;
 		}
 
-		if ( bSetTop ) {
+		if( bSetTop )
+		{
 			g_pParentWnd->GetZWnd()->m_pZClip->SetTop( org[2] );
-		    Sys_UpdateWindows ( W_ALL );
-			return;
-		}
-		
-		if ( bSetBot ) {
-			g_pParentWnd->GetZWnd()->m_pZClip->SetBottom( org[2] );
-		    Sys_UpdateWindows( W_ALL );
+			Sys_UpdateWindows( W_ALL );
 			return;
 		}
 
-		if ( bReset ) {
+		if( bSetBot )
+		{
+			g_pParentWnd->GetZWnd()->m_pZClip->SetBottom( org[2] );
+			Sys_UpdateWindows( W_ALL );
+			return;
+		}
+
+		if( bReset )
+		{
 			g_pParentWnd->GetZWnd()->m_pZClip->Reset();
-		    Sys_UpdateWindows( W_ALL );
+			Sys_UpdateWindows( W_ALL );
 			return;
 		}
 	}
@@ -144,16 +155,18 @@ void Z_MouseDown( int x, int y, int buttons ) {
 	//       ctrl-RIGHT button = set ZClip bottom marker
 
 	int nMouseButton = g_PrefsDlg.m_nMouseButtons == 2 ? MK_RBUTTON : MK_MBUTTON;
-	if ( ( buttons == MK_LBUTTON ) ||
-		 ( buttons == ( MK_LBUTTON | MK_SHIFT ) ) ||
-		 ( buttons == MK_MBUTTON ) || //(buttons == (MK_MBUTTON|MK_CONTROL)) ||
-		 ( buttons == ( nMouseButton | MK_SHIFT | MK_CONTROL ) ) ) {
+	if( ( buttons == MK_LBUTTON ) ||
+			( buttons == ( MK_LBUTTON | MK_SHIFT ) ) ||
+			( buttons == MK_MBUTTON ) || //(buttons == (MK_MBUTTON|MK_CONTROL)) ||
+			( buttons == ( nMouseButton | MK_SHIFT | MK_CONTROL ) ) )
+	{
 		Drag_Begin( x, y, buttons, vright, vup, org, dir );
 		return;
 	}
 
 	// control mbutton = move camera
-	if ( ( buttons == ( MK_CONTROL | nMouseButton ) ) || ( buttons == ( MK_CONTROL | MK_LBUTTON ) ) ) {
+	if( ( buttons == ( MK_CONTROL | nMouseButton ) ) || ( buttons == ( MK_CONTROL | MK_LBUTTON ) ) )
+	{
 		g_pParentWnd->GetCamera()->Camera().origin[2] = org[2];
 		Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY | W_Z );
 	}
@@ -164,7 +177,8 @@ void Z_MouseDown( int x, int y, int buttons ) {
     Z_MouseUp
  =======================================================================================================================
  */
-void Z_MouseUp( int x, int y, int buttons ) {
+void Z_MouseUp( int x, int y, int buttons )
+{
 	Drag_MouseUp();
 }
 
@@ -173,21 +187,26 @@ void Z_MouseUp( int x, int y, int buttons ) {
     Z_MouseMoved
  =======================================================================================================================
  */
-void Z_MouseMoved( int x, int y, int buttons ) {
-	if ( !buttons ) {
+void Z_MouseMoved( int x, int y, int buttons )
+{
+	if( !buttons )
+	{
 		return;
 	}
 
-	if ( buttons == MK_LBUTTON ) {
+	if( buttons == MK_LBUTTON )
+	{
 		Drag_MouseMoved( x, y, buttons );
 		Sys_UpdateWindows( W_Z | W_CAMERA_IFON | W_XY );
 		return;
 	}
 
 	// rbutton = drag z origin
-	if ( buttons == MK_RBUTTON ) {
+	if( buttons == MK_RBUTTON )
+	{
 		Sys_GetCursorPos( &x, &y );
-		if ( y != cursory ) {
+		if( y != cursory )
+		{
 			z.origin[2] += y - cursory;
 			Sys_SetCursorPos( cursorx, cursory );
 			Sys_UpdateWindows( W_Z );
@@ -197,7 +216,8 @@ void Z_MouseMoved( int x, int y, int buttons ) {
 
 	// control mbutton = move camera
 	int nMouseButton = g_PrefsDlg.m_nMouseButtons == 2 ? MK_RBUTTON : MK_MBUTTON;
-	if ( ( buttons == ( MK_CONTROL | nMouseButton ) ) || ( buttons == ( MK_CONTROL | MK_LBUTTON ) ) ) {	
+	if( ( buttons == ( MK_CONTROL | nMouseButton ) ) || ( buttons == ( MK_CONTROL | MK_LBUTTON ) ) )
+	{
 		g_pParentWnd->GetCamera()->Camera().origin[2] = z.origin[2] + ( y - ( z.height / 2 ) ) / z.scale;
 		Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY | W_Z );
 	}
@@ -209,7 +229,8 @@ void Z_MouseMoved( int x, int y, int buttons ) {
     Z_DrawGrid
  =======================================================================================================================
  */
-void Z_DrawGrid( void ) {
+void Z_DrawGrid()
+{
 	float	zz, zb, ze;
 	int		w, h;
 	char	text[ 32 ];
@@ -220,13 +241,15 @@ void Z_DrawGrid( void ) {
 	int	stepSize = max( 64, g_qeglobals.d_gridsize );	// sikk - Larger Grid Sizes - Added
 
 	zb = z.origin[2] - h;
-	if ( zb < region_mins[ 2 ] ) {
+	if( zb < region_mins[ 2 ] )
+	{
 		zb = region_mins[ 2 ];
 	}
 	zb = stepSize * floor( zb / stepSize );				// sikk - Larger Grid Sizes	- was 64
 
 	ze = z.origin[2] + h;
-	if ( ze > region_maxs[ 2 ] ) {
+	if( ze > region_maxs[ 2 ] )
+	{
 		ze = region_maxs[ 2 ];
 	}
 	ze = stepSize * ceil( ze / stepSize );				// sikk - Larger Grid Sizes	- was 64
@@ -236,21 +259,25 @@ void Z_DrawGrid( void ) {
 	qglBegin( GL_LINES );
 	qglVertex2f( 0, zb );
 	qglVertex2f( 0, ze );
-	for ( zz = zb; zz < ze; zz += stepSize ) {			// sikk - Larger Grid Sizes	- was 64
+	for( zz = zb; zz < ze; zz += stepSize )  			// sikk - Larger Grid Sizes	- was 64
+	{
 		qglVertex2f( -w, zz );
 		qglVertex2f( w, zz );
 	}
 	qglEnd();
 
 	// draw minor blocks
-	if ( g_qeglobals.d_showgrid &&
-		 g_qeglobals.d_gridsize * z.scale >= 4 &&
-		!g_qeglobals.d_savedinfo.colors[ COLOR_GRIDMINOR ].Compare( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDBACK ] ) ) {
+	if( g_qeglobals.d_showgrid &&
+			g_qeglobals.d_gridsize * z.scale >= 4 &&
+			!g_qeglobals.d_savedinfo.colors[ COLOR_GRIDMINOR ].Compare( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDBACK ] ) )
+	{
 
 		qglColor3fv( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDMINOR ].ToFloatPtr() );
 		qglBegin( GL_LINES );
-		for ( zz = zb; zz < ze; zz += g_qeglobals.d_gridsize ) {
-			if ( !( (int)zz & 63 ) ) {
+		for( zz = zb; zz < ze; zz += g_qeglobals.d_gridsize )
+		{
+			if( !( ( int )zz & 63 ) )
+			{
 				continue;
 			}
 			qglVertex2f( -w, zz );
@@ -262,9 +289,10 @@ void Z_DrawGrid( void ) {
 	// draw coordinate text if needed
 	qglColor3fv( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDTEXT ].ToFloatPtr() );
 
-	for ( zz = zb; zz < ze; zz += 64 ) {
+	for( zz = zb; zz < ze; zz += 64 )
+	{
 		qglRasterPos2f( -w + 1, zz );
-		sprintf( text, "%i", (int)zz );
+		sprintf( text, "%i", ( int )zz );
 		qglCallLists( strlen( text ), GL_UNSIGNED_BYTE, text );
 	}
 }
@@ -276,7 +304,8 @@ void Z_DrawGrid( void ) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void ZDrawCameraIcon( void ) {
+void ZDrawCameraIcon()
+{
 	float	x, y;
 	int		xCam = z.width / 4;
 
@@ -297,13 +326,15 @@ void ZDrawCameraIcon( void ) {
 	qglEnd();
 }
 
-void ZDrawZClip( void ) {
+void ZDrawZClip()
+{
 	float x, y;
-	
+
 	x = 0;
 	y = g_pParentWnd->GetCamera()->Camera().origin[2];
 
-	if ( g_pParentWnd->GetZWnd()->m_pZClip ) {	// should always be the case I think
+	if( g_pParentWnd->GetZWnd()->m_pZClip )  	// should always be the case I think
+	{
 		g_pParentWnd->GetZWnd()->m_pZClip->Paint();
 	}
 }
@@ -316,14 +347,16 @@ GLbitfield	glbitClear = GL_COLOR_BUFFER_BIT;	// HACK
     Z_Draw
  =======================================================================================================================
  */
-void Z_Draw( void ) {
-	brush_t		*brush;
+void Z_Draw()
+{
+	brush_t*		brush;
 	float		w, h;
 	float		top, bottom;
 	idVec3		org_top, org_bottom, dir_up, dir_down;
 	int			xCam = z.width / 3;
 
-	if ( !active_brushes.next ) {
+	if( !active_brushes.next )
+	{
 		return; // not valid yet
 	}
 
@@ -382,20 +415,24 @@ void Z_Draw( void ) {
 	VectorCopy( z.origin, org_bottom );
 	org_bottom[2] = -4096;
 
-	for ( brush = active_brushes.next; brush != &active_brushes; brush = brush->next ) {
-		if ( brush->mins[0] >= z.origin[0] ||
-			 brush->maxs[0] <= z.origin[0] ||
-			 brush->mins[1] >= z.origin[1] ||
-			 brush->maxs[1] <= z.origin[1] ) {
+	for( brush = active_brushes.next; brush != &active_brushes; brush = brush->next )
+	{
+		if( brush->mins[0] >= z.origin[0] ||
+				brush->maxs[0] <= z.origin[0] ||
+				brush->mins[1] >= z.origin[1] ||
+				brush->maxs[1] <= z.origin[1] )
+		{
 			continue;
 		}
 
-		if ( !Brush_Ray( org_top, dir_down, brush, &top ) ) {
+		if( !Brush_Ray( org_top, dir_down, brush, &top ) )
+		{
 			continue;
 		}
 
 		top = org_top[2] - top;
-		if ( !Brush_Ray( org_bottom, dir_up, brush, &bottom ) ) {
+		if( !Brush_Ray( org_bottom, dir_up, brush, &bottom ) )
+		{
 			continue;
 		}
 
@@ -420,14 +457,18 @@ void Z_Draw( void ) {
 	}
 
 	// now draw selected brushes
-	for ( brush = selected_brushes.next; brush != &selected_brushes; brush = brush->next ) {
-		if ( !( brush->mins[0] >= z.origin[0] ||
+	for( brush = selected_brushes.next; brush != &selected_brushes; brush = brush->next )
+	{
+		if( !( brush->mins[0] >= z.origin[0] ||
 				brush->maxs[0] <= z.origin[0] ||
 				brush->mins[1] >= z.origin[1] ||
-				brush->maxs[1] <= z.origin[1] ) ) {
-			if ( Brush_Ray( org_top, dir_down, brush, &top ) ) {
+				brush->maxs[1] <= z.origin[1] ) )
+		{
+			if( Brush_Ray( org_top, dir_down, brush, &top ) )
+			{
 				top = org_top[2] - top;
-				if ( Brush_Ray( org_bottom, dir_up, brush, &bottom ) ) {
+				if( Brush_Ray( org_bottom, dir_up, brush, &bottom ) )
+				{
 					bottom = org_bottom[2] + bottom;
 
 					//q = declManager->FindMaterial(brush->brush_faces->texdef.name);

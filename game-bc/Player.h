@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ If you have questions concerning this license or the applicable additional terms
 ===============================================================================
 
 	Player entity.
-	
+
 ===============================================================================
 */
 
@@ -54,7 +54,7 @@ const int	FOCUS_TIME = 300;
 const int	FOCUS_GUI_TIME = 500;
 
 const int DEAD_HEARTRATE = 0;			// fall to as you die
-const int LOWHEALTH_HEARTRATE_ADJ = 20; // 
+const int LOWHEALTH_HEARTRATE_ADJ = 20; //
 const int DYING_HEARTRATE = 30;			// used for volumen calc when dying/dead
 const int BASE_HEARTRATE = 70;			// default
 const int ZEROSTAMINA_HEARTRATE = 100;  // no stamina
@@ -66,46 +66,56 @@ const int DEATH_VOLUME = 5;				// volume at death
 const int ASYNC_PLAYER_INV_AMMO_BITS = idMath::BitsForInteger( 999 );	// 9 bits to cover the range [0, 999]
 const int ASYNC_PLAYER_INV_CLIP_BITS = -7;								// -7 bits to cover the range [-1, 60]
 
-struct idItemInfo {
+struct idItemInfo
+{
 	idStr name;
 	idStr icon;
 };
 
-struct idLevelTriggerInfo {
+struct idLevelTriggerInfo
+{
 	idStr levelName;
 	idStr triggerName;
 };
 
 // influence levels
-enum influenceLevels_e {
+enum influenceLevels_e
+{
 	INFLUENCE_NONE = 0,			// none
 	INFLUENCE_LEVEL1,			// no gun or hud
 	INFLUENCE_LEVEL2,			// no gun, hud, movement
 	INFLUENCE_LEVEL3,			// slow player movement
 };
 
-class idInventory {
+class idInventory
+{
 public:
 	int						maxHealth;
 
-	idList<idDict *>		items;
+	idList<idDict*>		items;
 
 	int						lastGiveTime;
 
 	idList<idLevelTriggerInfo> levelTriggers;
 
-							idInventory() { Clear(); }
-							~idInventory() { Clear(); }
+	idInventory()
+	{
+		Clear();
+	}
+	~idInventory()
+	{
+		Clear();
+	}
 
 	// save games
-	void					Save( idSaveGame *savefile ) const;					// archives object for save game file
-	void					Restore( idRestoreGame *savefile );					// unarchives object from save game file
+	void					Save( idSaveGame* savefile ) const;					// archives object for save game file
+	void					Restore( idRestoreGame* savefile );					// unarchives object from save game file
 
-	void					Clear( void );
-	void					GetPersistantData( idDict &dict );
-	void					RestoreInventory( idPlayer *owner, const idDict &dict );
-	bool					Give( idPlayer *owner, const idDict &spawnArgs, const char *statname, const char *value, int *idealWeapon, bool updateHud );
-	void					AddPickupName( const char *name, const char *icon );
+	void					Clear();
+	void					GetPersistantData( idDict& dict );
+	void					RestoreInventory( idPlayer* owner, const idDict& dict );
+	bool					Give( idPlayer* owner, const idDict& spawnArgs, const char* statname, const char* value, int* idealWeapon, bool updateHud );
+	void					AddPickupName( const char* name, const char* icon );
 
 	int						nextItemPickup;
 	int						nextItemNum;
@@ -113,17 +123,20 @@ public:
 	idList<idItemInfo>		pickupItemNames;
 };
 
-typedef struct loggedAccel_s {
+typedef struct loggedAccel_s
+{
 	int		time;
 	idVec3	dir;		// scaled larger for running
 } loggedAccel_t;
 
-typedef struct aasLocation_s {
+typedef struct aasLocation_s
+{
 	int		areaNum;
 	idVec3	pos;
 } aasLocation_t;
 
-typedef struct threatLevel_s{
+typedef struct threatLevel_s
+{
 	idInterpolate<float>	proximityLerp;
 	idInterpolate<float>	fovLerp;
 	idInterpolate<float>	feedbackLerp;
@@ -131,8 +144,9 @@ typedef struct threatLevel_s{
 } threatLevel_t;
 
 // ---> sikk - Level Stats System
-enum levelStats_e {
-	TIME = 0, 
+enum levelStats_e
+{
+	TIME = 0,
 	SCORE,
 	SCORETOTAL,
 	LEVELERSFOUND,
@@ -141,7 +155,8 @@ enum levelStats_e {
 	NUM_STATS
 };
 
-typedef struct levelStats_s {
+typedef struct levelStats_s
+{
 	int	time;
 	int	score;	// this is per level score, total score is kept in idInventory so it maintains across levels
 	int	scoreTotal;
@@ -151,9 +166,11 @@ typedef struct levelStats_s {
 } levelStats_t;
 // <--- sikk - Level Stats System
 
-class idPlayer : public idActor {
+class idPlayer : public idActor
+{
 public:
-	enum {
+	enum
+	{
 		EVENT_IMPULSE = idEntity::EVENT_MAXEVENTS,
 		EVENT_EXIT_TELEPORTER,
 		EVENT_ABORT_TELEPORTER,
@@ -205,8 +222,8 @@ public:
 	// inventory
 	idInventory				inventory;
 
-	idUserInterface *		hud;				// MP: is NULL if not local player
-	idUserInterface *		stats;				// sikk - Level Stats System: GUI
+	idUserInterface* 		hud;				// MP: is NULL if not local player
+	idUserInterface* 		stats;				// sikk - Level Stats System: GUI
 
 	int						heartRate;
 	idInterpolate<float>	heartInfo;
@@ -236,136 +253,154 @@ public:
 public:
 	CLASS_PROTOTYPE( idPlayer );
 
-							idPlayer();
+	idPlayer();
 	virtual					~idPlayer();
 
-	void					Spawn( void );
-	void					Think( void );
+	void					Spawn();
+	void					Think();
 
 	// save games
-	void					Save( idSaveGame *savefile ) const;					// archives object for save game file
-	void					Restore( idRestoreGame *savefile );					// unarchives object from save game file
+	void					Save( idSaveGame* savefile ) const;					// archives object for save game file
+	void					Restore( idRestoreGame* savefile );					// unarchives object from save game file
 
-	virtual void			Hide( void );
-	virtual void			Show( void );
+	virtual void			Hide();
+	virtual void			Show();
 
-	void					Init( void );
-	void					PrepareForRestart( void );
-	virtual void			Restart( void );
-	void					LinkScriptVariables( void );
-	void					SelectInitialSpawnPoint( idVec3 &origin, idAngles &angles );
-	void					SpawnFromSpawnSpot( void );
-	void					SpawnToPoint( const idVec3	&spawn_origin, const idAngles &spawn_angles );
-	void					SetClipModel( void );	// spectator mode uses a different bbox size
+	void					Init();
+	void					PrepareForRestart();
+	virtual void			Restart();
+	void					LinkScriptVariables();
+	void					SelectInitialSpawnPoint( idVec3& origin, idAngles& angles );
+	void					SpawnFromSpawnSpot();
+	void					SpawnToPoint( const idVec3&	spawn_origin, const idAngles& spawn_angles );
+	void					SetClipModel();	// spectator mode uses a different bbox size
 
-	void					SavePersistantInfo( void );
-	void					RestorePersistantInfo( void );
-	void					SetLevelTrigger( const char *levelName, const char *triggerName );
+	void					SavePersistantInfo();
+	void					RestorePersistantInfo();
+	void					SetLevelTrigger( const char* levelName, const char* triggerName );
 
 	bool					UserInfoChanged( bool canModify );
-	idDict *				GetUserInfo( void );
+	idDict* 				GetUserInfo();
 
-	void					EnterCinematic( void );
-	void					ExitCinematic( void );
-	bool					HandleESC( void );
-	bool					SkipCinematic( void );
+	void					EnterCinematic();
+	void					ExitCinematic();
+	bool					HandleESC();
+	bool					SkipCinematic();
 
-	void					UpdateConditions( void );
-	void					SetViewAngles( const idAngles &angles );
+	void					UpdateConditions();
+	void					SetViewAngles( const idAngles& angles );
 
-							// delta view angles to allow movers to rotate the view of the player
-	void					UpdateDeltaViewAngles( const idAngles &angles );
+	// delta view angles to allow movers to rotate the view of the player
+	void					UpdateDeltaViewAngles( const idAngles& angles );
 
-	virtual bool			Collide( const trace_t &collision, const idVec3 &velocity );
+	virtual bool			Collide( const trace_t& collision, const idVec3& velocity );
 
-	virtual void			GetAASLocation( idAAS *aas, idVec3 &pos, int &areaNum ) const;
-	virtual void			GetAIAimTargets( const idVec3 &lastSightPos, idVec3 &headPos, idVec3 &chestPos );
-	virtual void			DamageFeedback( idEntity *victim, idEntity *inflictor, int &damage );
-	void					CalcDamagePoints(  idEntity *inflictor, idEntity *attacker, const idDict *damageDef,
-							   const float damageScale, const int location, int *health, int *armor );
-	virtual	void			Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
+	virtual void			GetAASLocation( idAAS* aas, idVec3& pos, int& areaNum ) const;
+	virtual void			GetAIAimTargets( const idVec3& lastSightPos, idVec3& headPos, idVec3& chestPos );
+	virtual void			DamageFeedback( idEntity* victim, idEntity* inflictor, int& damage );
+	void					CalcDamagePoints( idEntity* inflictor, idEntity* attacker, const idDict* damageDef,
+			const float damageScale, const int location, int* health, int* armor );
+	virtual	void			Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir, const char* damageDefName, const float damageScale, const int location );
 
-							// use exitEntityNum to specify a teleport with private camera view and delayed exit
-	virtual void			Teleport( const idVec3 &origin, const idAngles &angles, idEntity *destination );
+	// use exitEntityNum to specify a teleport with private camera view and delayed exit
+	virtual void			Teleport( const idVec3& origin, const idAngles& angles, idEntity* destination );
 
 	void					Kill( bool delayRespawn, bool nodamage );
-	virtual void			Killed( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
-	void					StartFxOnBone(const char *fx, const char *bone);
+	virtual void			Killed( idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location );
+	void					StartFxOnBone( const char* fx, const char* bone );
 
-	renderView_t *			GetRenderView( void );
-	void					CalculateRenderView( void );	// called every tic by player code
-	void					CalculateFirstPersonView( void );
+	renderView_t* 			GetRenderView();
+	void					CalculateRenderView();	// called every tic by player code
+	void					CalculateFirstPersonView();
 
-	void					DrawHUD( idUserInterface *hud );
+	void					DrawHUD( idUserInterface* hud );
 
-	float					DefaultFov( void ) const;
+	float					DefaultFov() const;
 	float					CalcFov( bool honorZoom );
-	idVec3					GetEyePosition( void ) const;
-	void					GetViewPos( idVec3 &origin, idMat3 &axis ) const;
+	idVec3					GetEyePosition() const;
+	void					GetViewPos( idVec3& origin, idMat3& axis ) const;
 	void					OffsetThirdPersonView( float angle, float range, float height, bool clip );
 
-	bool					Give( const char *statname, const char *value );
-	bool					GiveItem( idItem *item );
-	void					GiveItem( const char *name );
-	
-	bool					GiveInventoryItem( idDict *item );
-	void					RemoveInventoryItem( idDict *item );
-	bool					GiveInventoryItem( const char *name );
-	void					RemoveInventoryItem( const char *name );
-	idDict *				FindInventoryItem( const char *name );
+	bool					Give( const char* statname, const char* value );
+	bool					GiveItem( idItem* item );
+	void					GiveItem( const char* name );
+
+	bool					GiveInventoryItem( idDict* item );
+	void					RemoveInventoryItem( idDict* item );
+	bool					GiveInventoryItem( const char* name );
+	void					RemoveInventoryItem( const char* name );
+	idDict* 				FindInventoryItem( const char* name );
 
 	void					SetLastHitTime( int time );
 
 	void					AdjustHeartRate( int target, float timeInSecs, float delay, bool force );
-	void					SetCurrentHeartRate( void );
-	int						GetBaseHeartRate( void );
-	
-	virtual bool			HandleSingleGuiCommand( idEntity *entityGui, idLexer *src );
-	bool					GuiActive( void ) { return focusGUIent != NULL; }
+	void					SetCurrentHeartRate();
+	int						GetBaseHeartRate();
+
+	virtual bool			HandleSingleGuiCommand( idEntity* entityGui, idLexer* src );
+	bool					GuiActive()
+	{
+		return focusGUIent != NULL;
+	}
 
 	void					PerformImpulse( int impulse );
-	void					RouteGuiMouse( idUserInterface *gui );
-	void					UpdateHud( void );
-	void					UpdateHudStats( idUserInterface *hud );
+	void					RouteGuiMouse( idUserInterface* gui );
+	void					UpdateHud();
+	void					UpdateHudStats( idUserInterface* hud );
 	void					SetInfluenceFov( float fov );
-	void					SetInfluenceView( const char *mtr, const char *skinname, float radius, idEntity *ent );
+	void					SetInfluenceView( const char* mtr, const char* skinname, float radius, idEntity* ent );
 	void					SetInfluenceLevel( int level );
-	int						GetInfluenceLevel( void ) { return influenceActive; };
-	void					SetPrivateCameraView( idCamera *camView );
-	idCamera *				GetPrivateCameraView( void ) const { return privateCameraView; }
-	void					StartFxFov( float duration  );
+	int						GetInfluenceLevel()
+	{
+		return influenceActive;
+	};
+	void					SetPrivateCameraView( idCamera* camView );
+	idCamera* 				GetPrivateCameraView() const
+	{
+		return privateCameraView;
+	}
+	void					StartFxFov( float duration );
 
-	virtual bool			GetPhysicsToVisualTransform( idVec3 &origin, idMat3 &axis );
-	virtual bool			GetPhysicsToSoundTransform( idVec3 &origin, idMat3 &axis );
+	virtual bool			GetPhysicsToVisualTransform( idVec3& origin, idMat3& axis );
+	virtual bool			GetPhysicsToSoundTransform( idVec3& origin, idMat3& axis );
 
-	bool					IsInTeleport( void );
+	bool					IsInTeleport();
 
-	idEntity*				GetInfluenceEntity( void ) { return influenceEntity; };
-	const idMaterial*		GetInfluenceMaterial( void ) { return influenceMaterial; };
-	float					GetInfluenceRadius( void ) { return influenceRadius; };
+	idEntity*				GetInfluenceEntity()
+	{
+		return influenceEntity;
+	};
+	const idMaterial*		GetInfluenceMaterial()
+	{
+		return influenceMaterial;
+	};
+	float					GetInfluenceRadius()
+	{
+		return influenceRadius;
+	};
 
 	void					TeleportDeath( int killer );
 
-	bool					OnLadder( void ) const;
+	bool					OnLadder() const;
 
 	float					sticky;	// sikk - Sticky movement modifier
 
 	int						endLevelTime;	// sikk - End Level Time
 	bool					doEndLevel;		// sikk - End Level Flag
 
-	float					GetIllumination( void );		// sikk - Player illumination test
+	float					GetIllumination();		// sikk - Player illumination test
 
-	void					UpdateMonsterSpawns( void );	// sikk - Monster Count
+	void					UpdateMonsterSpawns();	// sikk - Monster Count
 
 // ---> sikk - Threat Level
 	threatLevel_t			threatLevel;
-	void					UpdateThreatLevel( void );
+	void					UpdateThreatLevel();
 // <--- sikk - Threat Level
 
 // ---> sikk - Crumb Count
 	int						numCrumbs;
-	float					GetCrumbPct( void );
-	void					UpdateCrumbCount( void );
+	float					GetCrumbPct();
+	void					UpdateCrumbCount();
 // <--- sikk - Crumb Count
 
 // ---> sikk - Player Light
@@ -375,16 +410,16 @@ public:
 	float					lightBrightness;
 	int						lightBrightnessTime;
 	idInterpolate<float>	lightBrightnessLerp;
-	virtual void			FreeLightDef( void );
+	virtual void			FreeLightDef();
 	void					UpdatePlayerLight( bool doCharge );
 // <--- sikk - Player Light
 
 // ---> sikk - Target Post FX
-	void					SetTargetPostFX( const char *mtr, idVec4 color );
+	void					SetTargetPostFX( const char* mtr, idVec4 color );
 // <--- sikk - Target Post FX
 
 // ---> sikk - Centerprint Messages
-	void					Centerprint( const char *msg, const char *soundShader = "", bool toConsole = false );
+	void					Centerprint( const char* msg, const char* soundShader = "", bool toConsole = false );
 // <--- sikk - Centerprint Messages
 
 // ---> sikk - Level Music
@@ -392,11 +427,11 @@ public:
 	float					musicFadeTime;
 	int						music1ShotTime;
 	int						musicFlag;
-	const idSoundShader *	sndAmbientLooping1;
-	const idSoundShader *	sndAmbientLooping2;
-	const idSoundShader *	sndAmbient1shot;
-	void					SpawnMusic( void );
-	void					UpdateMusic( void );
+	const idSoundShader* 	sndAmbientLooping1;
+	const idSoundShader* 	sndAmbientLooping2;
+	const idSoundShader* 	sndAmbient1shot;
+	void					SpawnMusic();
+	void					UpdateMusic();
 // <--- sikk - Level Music
 
 // ---> sikk - Object Manipulation
@@ -438,12 +473,12 @@ private:
 
 	float					influenceFov;
 	int						influenceActive;		// level of influence.. 1 == no gun or hud .. 2 == 1 + no movement
-	idEntity *				influenceEntity;
-	const idMaterial *		influenceMaterial;
+	idEntity* 				influenceEntity;
+	const idMaterial* 		influenceMaterial;
 	float					influenceRadius;
-	const idDeclSkin *		influenceSkin;
+	const idDeclSkin* 		influenceSkin;
 
-	idCamera *				privateCameraView;
+	idCamera* 				privateCameraView;
 
 	static const int		NUM_LOGGED_VIEW_ANGLES = 64;		// for weapon turning angle offsets
 	idAngles				loggedViewAngles[NUM_LOGGED_VIEW_ANGLES];	// [gameLocal.framenum&(LOGGED_VIEW_ANGLES-1)]
@@ -452,12 +487,12 @@ private:
 	int						currentLoggedAccel;
 
 	// if there is a focusGUIent, the attack button will be changed into mouse clicks
-	idEntity *				focusGUIent;
-	idUserInterface *		focusUI;				// focusGUIent->renderEntity.gui, gui2, or gui3
+	idEntity* 				focusGUIent;
+	idUserInterface* 		focusUI;				// focusGUIent->renderEntity.gui, gui2, or gui3
 	int						focusTime;
-	idAFEntity_Vehicle *	focusVehicle;
-	idUserInterface *		cursor;
-	
+	idAFEntity_Vehicle* 	focusVehicle;
+	idUserInterface* 		cursor;
+
 	// full screen guis track mouse movements directly
 	int						oldMouseX;
 	int						oldMouseY;
@@ -470,40 +505,41 @@ private:
 	idVec3					smoothedOrigin;
 	idAngles				smoothedAngles;
 
-	void					LookAtKiller( idEntity *inflictor, idEntity *attacker );
+	void					LookAtKiller( idEntity* inflictor, idEntity* attacker );
 
-	void					UseObjects( void );
-	void					CrashLand( const idVec3 &oldOrigin, const idVec3 &oldVelocity );
-	void					BobCycle( const idVec3 &pushVelocity );
-	void					UpdateViewAngles( void );
-	void					EvaluateControls( void );
-	void					AdjustSpeed( void );
-	void					AdjustBodyAngles( void );
-	void					InitAASLocation( void );
-	void					SetAASLocation( void );
-	void					Move( void );
+	void					UseObjects();
+	void					CrashLand( const idVec3& oldOrigin, const idVec3& oldVelocity );
+	void					BobCycle( const idVec3& pushVelocity );
+	void					UpdateViewAngles();
+	void					EvaluateControls();
+	void					AdjustSpeed();
+	void					AdjustBodyAngles();
+	void					InitAASLocation();
+	void					SetAASLocation();
+	void					Move();
 
-	void					ClearFocus( void );
-	void					UpdateFocus( void );
-	void					UpdateLocation( void );
-	idUserInterface *		ActiveGui( void );
+	void					ClearFocus();
+	void					UpdateFocus();
+	void					UpdateLocation();
+	idUserInterface* 		ActiveGui();
 
 	void					UseVehicle( bool drive );	// sikk - function modified to support use function
 
-	void					Event_GetButtons( void );
-	void					Event_GetMove( void );
-	void					Event_GetViewAngles( void );
-	void					Event_StopFxFov( void );
-	void					Event_ExitTeleporter( void );
-	void					Event_LevelTrigger( void );
-	void					Event_Gibbed( void );
+	void					Event_GetButtons();
+	void					Event_GetMove();
+	void					Event_GetViewAngles();
+	void					Event_StopFxFov();
+	void					Event_ExitTeleporter();
+	void					Event_LevelTrigger();
+	void					Event_Gibbed();
 
-	void					Event_GetLightBrightness( void );	// sikk - Player Light
-	void					Event_GetCrumbPct( void );			// sikk - Crumb Count
-	void					Event_GetIllumination( void );				// sikk - Player Illumination Test
+	void					Event_GetLightBrightness();	// sikk - Player Light
+	void					Event_GetCrumbPct();			// sikk - Crumb Count
+	void					Event_GetIllumination();				// sikk - Player Illumination Test
 };
 
-ID_INLINE bool idPlayer::IsInTeleport( void ) {
+ID_INLINE bool idPlayer::IsInTeleport()
+{
 	return ( teleportEntity.GetEntity() != NULL );
 }
 

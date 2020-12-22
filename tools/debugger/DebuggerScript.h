@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,27 +31,27 @@ If you have questions concerning this license or the applicable additional terms
 class idProgram;
 class idUserInterfaceLocal;
 
-class rvDebuggerScript 
+class rvDebuggerScript
 {
 public:
 
-	rvDebuggerScript ( void );
-	~rvDebuggerScript ( void );
+	rvDebuggerScript();
+	~rvDebuggerScript();
 
-	bool	Load		( const char* filename );	
-	bool	Reload		( void );
+	bool	Load( const char* filename );
+	bool	Reload();
 
-	const char*		GetFilename		( void );
-	const char*		GetContents		( void );
+	const char*		GetFilename();
+	const char*		GetContents();
 
-	idProgram&		GetProgram		( void );
+	idProgram&		GetProgram();
 
-	bool			IsLineCode		( int linenumber );
-	bool			IsFileModified	( bool updateTime = false );	
+	bool			IsLineCode( int linenumber );
+	bool			IsFileModified( bool updateTime = false );
 
 protected:
 
-	void			Unload			( void );
+	void			Unload();
 
 	idProgram*				mProgram;
 	idUserInterfaceLocal*	mInterface;
@@ -60,17 +60,17 @@ protected:
 	ID_TIME_T					mModifiedTime;
 };
 
-ID_INLINE const char* rvDebuggerScript::GetFilename	( void )
+ID_INLINE const char* rvDebuggerScript::GetFilename()
 {
 	return mFilename;
 }
 
-ID_INLINE const char* rvDebuggerScript::GetContents	( void )
+ID_INLINE const char* rvDebuggerScript::GetContents()
 {
-	return mContents?mContents:"";
+	return mContents ? mContents : "";
 }
 
-ID_INLINE idProgram& rvDebuggerScript::GetProgram ( void )
+ID_INLINE idProgram& rvDebuggerScript::GetProgram()
 {
 	return *mProgram;
 }

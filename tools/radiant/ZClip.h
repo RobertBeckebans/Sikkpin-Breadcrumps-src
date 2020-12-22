@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,22 +35,32 @@ If you have questions concerning this license or the applicable additional terms
 #define ZCLIP_COLOUR		1.0f, 0.0f, 1.0f
 #define ZCLIP_COLOUR_DIM	0.8f, 0.0f, 0.8f
 
-class CZClip {
+class CZClip
+{
 public:
-			CZClip();
-			~CZClip();
+	CZClip();
+	~CZClip();
 
-	int		GetTop( void ) { return m_iZClipTop; };
-	int		GetBottom( void ) { return m_iZClipBottom; };
+	int		GetTop()
+	{
+		return m_iZClipTop;
+	};
+	int		GetBottom()
+	{
+		return m_iZClipBottom;
+	};
 	void	SetTop( int iNewZ );
 	void	SetBottom( int iNewZ );
-	void	Reset( void );
-	bool	IsEnabled( void ) { return m_bEnabled; };
+	void	Reset();
+	bool	IsEnabled()
+	{
+		return m_bEnabled;
+	};
 	bool	Enable( bool bOnOff );
-	void	Paint( void );
+	void	Paint();
 
 protected:
-	void	Legalise( void );
+	void	Legalise();
 
 	bool	m_bEnabled;
 	int		m_iZClipTop;

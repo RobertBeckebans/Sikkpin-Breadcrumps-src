@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 #define __PREFSDLG_H__
 
 #if _MSC_VER >= 1000
-#pragma once
+	#pragma once
 #endif // _MSC_VER >= 1000
 
 /////////////////////////////////////////////////////////////////////////////
@@ -38,14 +38,15 @@ If you have questions concerning this license or the applicable additional terms
 
 #define MAX_TEXTURE_QUALITY 3
 
-class CPrefsDlg : public CDialog {
+class CPrefsDlg : public CDialog
+{
 // Construction
 public:
-						CPrefsDlg( CWnd* pParent = NULL );   // standard constructor
+	CPrefsDlg( CWnd* pParent = NULL );   // standard constructor
 
-	void				LoadPrefs( void );
-	void				SavePrefs( void );
-	void				SetGamePrefs( void );
+	void				LoadPrefs();
+	void				SavePrefs();
+	void				SetGamePrefs();
 
 // Dialog Data
 	//{{AFX_DATA(CPrefsDlg)
@@ -116,20 +117,20 @@ public:
 
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CPrefsDlg)
-	protected:
+protected:
 	virtual void		DoDataExchange( CDataExchange* pDX );    // DDX/DDV support
 	//}}AFX_VIRTUAL
 
 protected:
 	// Generated message map functions
 	//{{AFX_MSG(CPrefsDlg)
-	afx_msg void		OnBtnBrowse( void );
-	virtual BOOL		OnInitDialog( void );
-	virtual void		OnOK( void );
-	afx_msg void		OnBtnBrowsepak( void );
-	afx_msg void		OnBtnBrowseprefab( void );
-	afx_msg void		OnBtnBrowseuserini( void );
-	afx_msg void		OnSelchangeComboWhatgame( void );
+	afx_msg void		OnBtnBrowse();
+	virtual BOOL		OnInitDialog();
+	virtual void		OnOK();
+	afx_msg void		OnBtnBrowsepak();
+	afx_msg void		OnBtnBrowseprefab();
+	afx_msg void		OnBtnBrowseuserini();
+	afx_msg void		OnSelchangeComboWhatgame();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

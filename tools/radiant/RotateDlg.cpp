@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,9 +34,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "RotateDlg.h"
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
+	#define new DEBUG_NEW
+	#undef THIS_FILE
+	static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,8 @@ static char THIS_FILE[] = __FILE__;
 CRotateDlg g_dlgRotate;	// sikk - New rotate dialog functionality
 
 CRotateDlg::CRotateDlg( CWnd* pParent /*=NULL*/ )
-	: CDialog( CRotateDlg::IDD, pParent ) {
+	: CDialog( CRotateDlg::IDD, pParent )
+{
 	//{{AFX_DATA_INIT(CRotateDlg)
 // ---> sikk - New rotate dialog functionality
 	m_nRotX = m_nRotY = m_nRotZ = 0;
@@ -54,7 +55,8 @@ CRotateDlg::CRotateDlg( CWnd* pParent /*=NULL*/ )
 	//}}AFX_DATA_INIT
 }
 
-void CRotateDlg::DoDataExchange( CDataExchange* pDX ) {
+void CRotateDlg::DoDataExchange( CDataExchange* pDX )
+{
 	CDialog::DoDataExchange( pDX );
 	//{{AFX_DATA_MAP(CRotateDlg)
 // ---> sikk - New rotate dialog functionality
@@ -87,7 +89,8 @@ END_MESSAGE_MAP()
 
 HWND	g_rotatewin = NULL;	// sikk - New rotate dialog functionality
 
-BOOL CRotateDlg::OnInitDialog( void ) {
+BOOL CRotateDlg::OnInitDialog()
+{
 	CDialog::OnInitDialog();
 
 // ---> sikk - New rotate dialog functionality
@@ -104,35 +107,44 @@ BOOL CRotateDlg::OnInitDialog( void ) {
 // <--- sikk - New rotate dialog functionality
 
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
 // ---> sikk - New rotate dialog functionality
-void CRotateDlg::OnHScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar ) {
+void CRotateDlg::OnHScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar )
+{
 	UpdateData( TRUE );
-	if ( pScrollBar->IsKindOf( RUNTIME_CLASS( CSliderCtrl ) ) ) {
-		CSliderCtrl *ctrl = reinterpret_cast<CSliderCtrl*>( pScrollBar );
+	if( pScrollBar->IsKindOf( RUNTIME_CLASS( CSliderCtrl ) ) )
+	{
+		CSliderCtrl* ctrl = reinterpret_cast<CSliderCtrl*>( pScrollBar );
 		assert( ctrl );
-		if ( ctrl == &m_wndRotX ) {
+		if( ctrl == &m_wndRotX )
+		{
 			m_nOldRotX = m_nRotX;
 			m_nRotX = ctrl->GetPos();
-			Select_RotateAxis( 0, (float)( m_nRotX - m_nOldRotX ) );
-		} else if ( ctrl == &m_wndRotY ) {
+			Select_RotateAxis( 0, ( float )( m_nRotX - m_nOldRotX ) );
+		}
+		else if( ctrl == &m_wndRotY )
+		{
 			m_nOldRotY = m_nRotY;
 			m_nRotY = ctrl->GetPos();
-			Select_RotateAxis( 1, (float)( m_nRotY - m_nOldRotY ) );
-		} else {
+			Select_RotateAxis( 1, ( float )( m_nRotY - m_nOldRotY ) );
+		}
+		else
+		{
 			m_nOldRotZ = m_nRotZ;
 			m_nRotZ = ctrl->GetPos();
-			Select_RotateAxis( 2, (float)( m_nRotZ - m_nOldRotZ ) );
-		}		
+			Select_RotateAxis( 2, ( float )( m_nRotZ - m_nOldRotZ ) );
+		}
 		UpdateData( FALSE );
 	}
 	Sys_UpdateWindows( W_CAMERA | W_XY );
 }
 
-void DoRotate( void ) {
-	if ( g_rotatewin == NULL && g_dlgRotate.GetSafeHwnd() == NULL ) {
+void DoRotate()
+{
+	if( g_rotatewin == NULL && g_dlgRotate.GetSafeHwnd() == NULL )
+	{
 		g_dlgRotate.Create( IDD_ROTATE );
 		CRect rct;
 		LONG lSize = sizeof( rct );
@@ -141,11 +153,13 @@ void DoRotate( void ) {
 		//}
 		g_dlgRotate.ShowWindow( SW_SHOW );
 		Sys_UpdateWindows( W_ALL );
-	} else {
+	}
+	else
+	{
 		g_rotatewin = g_dlgRotate.GetSafeHwnd();
 		//g_dlgSurface.SetTexMods ();
 		g_dlgRotate.ShowWindow( SW_SHOW );
 	}
-}		
+}
 
 // <--- sikk - New rotate dialog functionality

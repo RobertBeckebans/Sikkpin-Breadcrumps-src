@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 #define AFX_RADIANT_H__330BBF06_731C_11D1_B539_00AA00A410FC__INCLUDED_
 
 #if _MSC_VER >= 1000
-#pragma once
+	#pragma once
 #endif // _MSC_VER >= 1000
 
 #ifndef __AFXWIN_H__
@@ -42,24 +42,25 @@ If you have questions concerning this license or the applicable additional terms
 // See Radiant.cpp for the implementation of this class
 //
 
-class CRadiantApp : public CWinApp {
+class CRadiantApp : public CWinApp
+{
 
 public:
-					CRadiantApp( void );
+	CRadiantApp();
 
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CRadiantApp)
-	public:
-	virtual BOOL	InitInstance( void );
-	virtual int		ExitInstance( void );
+public:
+	virtual BOOL	InitInstance();
+	virtual int		ExitInstance();
 	virtual BOOL	OnIdle( LONG lCount );
-	virtual int		Run( void );
+	virtual int		Run();
 	//}}AFX_VIRTUAL
 
 // Implementation
 	//{{AFX_MSG(CRadiantApp)
-	afx_msg void	OnHelp( void );
+	afx_msg void	OnHelp();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

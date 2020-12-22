@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,10 +29,11 @@ If you have questions concerning this license or the applicable additional terms
 #define AFX_CAMWND_H__44B4BA03_781B_11D1_B53C_00AA00A410FC__INCLUDED_
 
 #if _MSC_VER >= 1000
-#pragma once
+	#pragma once
 #endif // _MSC_VER >= 1000
 
-typedef enum {
+typedef enum
+{
 	cd_wire,
 	cd_solid,
 	cd_texture,
@@ -40,7 +41,8 @@ typedef enum {
 	cd_blend
 } camera_draw_mode;
 
-typedef struct {
+typedef struct
+{
 	int			width, height;
 
 	idVec3		origin;
@@ -48,7 +50,7 @@ typedef struct {
 
 	camera_draw_mode	draw_mode;
 
-	idVec3		color;				// background 
+	idVec3		color;				// background
 
 	idVec3		forward, right, up;	// move matrix
 	idVec3		vup, vpn, vright;	// view matrix
@@ -60,12 +62,13 @@ typedef struct {
 // CCamWnd window
 class CXYWnd;
 
-class CCamWnd : public CWnd {
-	DECLARE_DYNCREATE(CCamWnd);
+class CCamWnd : public CWnd
+{
+	DECLARE_DYNCREATE( CCamWnd );
 // Construction
 public:
-				CCamWnd( void );
-	virtual		~CCamWnd( void );
+	CCamWnd();
+	virtual		~CCamWnd();
 
 // Attributes
 public:
@@ -82,71 +85,96 @@ protected:
 
 // Implementation
 public:
-	void			ShiftTexture_BrushPrimit( face_t *f, int x, int y );
+	void			ShiftTexture_BrushPrimit( face_t* f, int x, int y );
 	void			SetXYFriend( CXYWnd* pWnd );
-	camera_t&		Camera( void ){ return m_Camera; };
-	void			Cam_MouseControl( void );
+	camera_t&		Camera()
+	{
+		return m_Camera;
+	};
+	void			Cam_MouseControl();
 	void			Cam_KeyControl( float dtime );	// sikk - Added for wasd movement
 	void 			Cam_ChangeFloor( bool up );
-	void 			BuildRendererState( void );
-	void 			ToggleRenderMode( void );
-	void 			ToggleRebuildMode( void );
-	void 			ToggleEntityMode( void );
-	void 			ToggleSelectMode( void );
-	void 			ToggleAnimationMode( void );
-	void 			ToggleSoundMode( void );
-	void 			SetProjectionMatrix( void );
-	void 			UpdateCameraView( void );
+	void 			BuildRendererState();
+	void 			ToggleRenderMode();
+	void 			ToggleRebuildMode();
+	void 			ToggleEntityMode();
+	void 			ToggleSelectMode();
+	void 			ToggleAnimationMode();
+	void 			ToggleSoundMode();
+	void 			SetProjectionMatrix();
+	void 			UpdateCameraView();
 
-	void 			BuildEntityRenderState( entity_t *ent, bool update );
-	bool 			GetRenderMode( void ) { return renderMode; }
-	bool 			GetRebuildMode( void ) { return rebuildMode; }
-	bool 			GetEntityMode( void ) { return entityMode; }
-	bool 			GetAnimationMode( void ) { return animationMode; }
-	bool 			GetSelectMode( void ) { return selectMode; }
-	bool 			GetSoundMode( void ) { return soundMode; }
+	void 			BuildEntityRenderState( entity_t* ent, bool update );
+	bool 			GetRenderMode()
+	{
+		return renderMode;
+	}
+	bool 			GetRebuildMode()
+	{
+		return rebuildMode;
+	}
+	bool 			GetEntityMode()
+	{
+		return entityMode;
+	}
+	bool 			GetAnimationMode()
+	{
+		return animationMode;
+	}
+	bool 			GetSelectMode()
+	{
+		return selectMode;
+	}
+	bool 			GetSoundMode()
+	{
+		return soundMode;
+	}
 
-	bool 			UpdateRenderEntities( void );
-	void 			MarkWorldDirty( void );
+	bool 			UpdateRenderEntities();
+	void 			MarkWorldDirty();
 
-	void 			SetView( const idVec3 &origin, const idAngles &angles ) { m_Camera.origin = origin; m_Camera.angles = angles; }
+	void 			SetView( const idVec3& origin, const idAngles& angles )
+	{
+		m_Camera.origin = origin;
+		m_Camera.angles = angles;
+	}
 	void 			Cam_BuildMatrix();	// sikk - temp move until I write public wasd move functions
 
-	void			PositionView( void );	// sikk - Added - Center on Selection
+	void			PositionView();	// sikk - Added - Center on Selection
 
-	brush_t*		CreateDropBrush( void );	// sikk - Added - New Brush creation in Cam window
-	
+	brush_t*		CreateDropBrush();	// sikk - Added - New Brush creation in Cam window
+
 	CXYWnd*			m_pXYFriend;
 
 protected:
-	void 			Cam_Init( void );
-	void 			Cam_PositionDrag( void );
-	void 			Cam_PositionRotate( void );	// sikk - Added - Rotate Around Selection
+	void 			Cam_Init();
+	void 			Cam_PositionDrag();
+	void 			Cam_PositionRotate();	// sikk - Added - Rotate Around Selection
 	void 			Cam_Rotate( int x, int y, idVec3 org ); // sikk - Added - Rotate Around Selection
-	void 			Cam_MouseLook( void );
+	void 			Cam_MouseLook();
 	void 			Cam_MouseDown( int x, int y, int buttons );
 	void 			Cam_MouseUp( int x, int y, int buttons );
 	void 			Cam_MouseMoved( int x, int y, int buttons );
 	void			NewBrushDrag( int x, int y );	// sikk - Added - New Brush creation in Cam window
-	void 			InitCull( void );
-	bool 			CullBrush( brush_t *b, bool cubicOnly );
-	void 			Cam_Draw( void );
-	void 			Cam_Render( void );
+	void 			InitCull();
+	bool 			CullBrush( brush_t* b, bool cubicOnly );
+	void 			Cam_Draw();
+	void 			Cam_Render();
 // ---> sikk - Various Draw Functions
-	void 			Cam_DrawMapBounds( void );
-	void 			Cam_DrawWorldAxis( void );
-	void 			Cam_DrawCameraAxis( void );
-	void 			Cam_DrawClipPoints( void );
+	void 			Cam_DrawMapBounds();
+	void 			Cam_DrawWorldAxis();
+	void 			Cam_DrawCameraAxis();
+	void 			Cam_DrawClipPoints();
 // <--- sikk - Various Draw Functions
 
 	// game renderer interaction
-	void			FreeRendererState( void );
-	void			UpdateCaption( void );
-	bool			BuildBrushRenderData( brush_t *brush );
-	void			DrawEntityData( void );
+	void			FreeRendererState();
+	void			UpdateCaption();
+	bool			BuildBrushRenderData( brush_t* brush );
+	void			DrawEntityData();
 
 	qhandle_t		worldModelDef;
-	idRenderModel	*worldModel;		// createRawModel of the brush and patch geometry
+	idRenderModel*	worldModel;		// createRawModel of the brush and patch geometry
 	bool			worldDirty;
 	bool			renderMode;
 	bool			rebuildMode;
@@ -181,9 +209,9 @@ protected:
 	void 			OriginalMouseUp( UINT nFlags, CPoint point );
 	//{{AFX_MSG(CCamWnd)
 	afx_msg void	OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags );
-	afx_msg void	OnPaint( void );
-	afx_msg void	OnDestroy( void );
-	afx_msg void	OnClose( void );
+	afx_msg void	OnPaint();
+	afx_msg void	OnDestroy();
+	afx_msg void	OnClose();
 	afx_msg void	OnMouseMove( UINT nFlags, CPoint point );
 	afx_msg void	OnLButtonDown( UINT nFlags, CPoint point );
 	afx_msg void	OnLButtonUp( UINT nFlags, CPoint point );

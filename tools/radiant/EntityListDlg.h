@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 #define AFX_ENTITYLISTDLG_H__C241B9A3_819F_11D1_B548_00AA00A410FC__INCLUDED_
 
 #if _MSC_VER >= 1000
-#pragma once
+	#pragma once
 #endif // _MSC_VER >= 1000
 // EntityListDlg.h : header file
 //
@@ -38,12 +38,13 @@ If you have questions concerning this license or the applicable additional terms
 /////////////////////////////////////////////////////////////////////////////
 // CEntityListDlg dialog
 
-class CEntityListDlg : public CDialog {
+class CEntityListDlg : public CDialog
+{
 // Construction
 public:
 	CEntityListDlg( CWnd* pParent = NULL );   // standard constructor
-	void UpdateList( void );
-	static void ShowDialog( void );
+	void UpdateList();
+	static void ShowDialog();
 
 // Dialog Data
 	//{{AFX_DATA(CEntityListDlg)
@@ -64,18 +65,18 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CEntityListDlg)
-	afx_msg void OnSelect( void );
-	afx_msg void OnClose( void );
-	virtual void OnCancel( void );
-	virtual BOOL OnInitDialog( void );
+	afx_msg void OnSelect();
+	afx_msg void OnClose();
+	virtual void OnCancel();
+	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand( UINT nID,  LPARAM lParam );
 
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
 	//CListBox listEntities;
-	//afx_msg void OnLbnSelchangeListEntities( void );
-	//afx_msg void OnLbnDblclkListEntities( void );
+	//afx_msg void OnLbnSelchangeListEntities();
+	//afx_msg void OnLbnDblclkListEntities();
 
 // ---> sikk - Added - Changed Entity List Control to a Tree Control
 	CTreeCtrl	m_treeEntity;

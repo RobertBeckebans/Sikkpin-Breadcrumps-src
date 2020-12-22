@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,24 +34,26 @@ If you have questions concerning this license or the applicable additional terms
 #include "ZWnd.h"
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
+	#define new DEBUG_NEW
+	#undef THIS_FILE
+	static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
 // CZWnd
 IMPLEMENT_DYNCREATE( CZWnd, CWnd );
 
-CZWnd::CZWnd( void ) {
+CZWnd::CZWnd()
+{
 	m_pZClip = NULL;
 	Z_Init();	// sikk - Moved z.h/z.cpp contents into zwnd.h/zwnd.cpp
 }
 
-CZWnd::~CZWnd( void ) {
+CZWnd::~CZWnd()
+{
 }
 
-BEGIN_MESSAGE_MAP(CZWnd, CWnd)
+BEGIN_MESSAGE_MAP( CZWnd, CWnd )
 	//{{AFX_MSG_MAP(CZWnd)
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
@@ -82,21 +84,25 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CZWnd message handlers
 
-int CZWnd::OnCreate( LPCREATESTRUCT lpCreateStruct ) {
-	if ( CWnd::OnCreate( lpCreateStruct ) == -1 ) {
+int CZWnd::OnCreate( LPCREATESTRUCT lpCreateStruct )
+{
+	if( CWnd::OnCreate( lpCreateStruct ) == -1 )
+	{
 		return -1;
 	}
 
 	m_dcZ = ::GetDC( GetSafeHwnd() );
 	QEW_SetupPixelFormat( m_dcZ, false );
 
-  	m_pZClip = new CZClip();
+	m_pZClip = new CZClip();
 
 	return 0;
 }
 
-void CZWnd::OnDestroy( void ) {
-	if ( m_pZClip ) {
+void CZWnd::OnDestroy()
+{
+	if( m_pZClip )
+	{
 		delete m_pZClip;
 		m_pZClip = NULL;
 	}
@@ -104,75 +110,89 @@ void CZWnd::OnDestroy( void ) {
 	CWnd::OnDestroy();
 }
 
-void CZWnd::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags ) {
+void CZWnd::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
+{
 	g_pParentWnd->HandleKey( nChar, nRepCnt, nFlags );
 }
 
-void CZWnd::OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags ) {
+void CZWnd::OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags )
+{
 	g_pParentWnd->HandleKey( nChar, nRepCnt, nFlags, false );
 }
 
-void CZWnd::OnLButtonDown( UINT nFlags, CPoint point ) {
+void CZWnd::OnLButtonDown( UINT nFlags, CPoint point )
+{
 	SetFocus();
 	SetCapture();
 	CRect rctZ;
 	GetClientRect( rctZ );
 // ---> sikk - Bring window to front
-	if ( g_pParentWnd->GetTopWindow() != this ) {
+	if( g_pParentWnd->GetTopWindow() != this )
+	{
 		BringWindowToTop();
 	}
 // <--- sikk - Bring window to front
 	Z_MouseDown( point.x, rctZ.Height() - 1 - point.y, nFlags );
 }
 
-void CZWnd::OnMButtonDown( UINT nFlags, CPoint point ) {
+void CZWnd::OnMButtonDown( UINT nFlags, CPoint point )
+{
 	SetFocus();
 	SetCapture();
 	CRect rctZ;
 	GetClientRect( rctZ );
 // ---> sikk - Bring window to front
-	if ( g_pParentWnd->GetTopWindow() != this ) {
+	if( g_pParentWnd->GetTopWindow() != this )
+	{
 		BringWindowToTop();
 	}
 // <--- sikk - Bring window to front
 	Z_MouseDown( point.x, rctZ.Height() - 1 - point.y, nFlags );
 }
 
-void CZWnd::OnRButtonDown( UINT nFlags, CPoint point ) {
+void CZWnd::OnRButtonDown( UINT nFlags, CPoint point )
+{
 	SetFocus();
 	SetCapture();
 	CRect rctZ;
 	GetClientRect( rctZ );
 // ---> sikk - Bring window to front
-	if ( g_pParentWnd->GetTopWindow() != this ) {
+	if( g_pParentWnd->GetTopWindow() != this )
+	{
 		BringWindowToTop();
 	}
 // <--- sikk - Bring window to front
 	Z_MouseDown( point.x, rctZ.Height() - 1 - point.y, nFlags );
 }
 
-void CZWnd::OnPaint() {
+void CZWnd::OnPaint()
+{
 	CPaintDC dc( this ); // device context for painting
 	//if (!wglMakeCurrent(m_dcZ, m_hglrcZ))
 	//if (!qwglMakeCurrent(dc.m_hDC, m_hglrcZ))
-	if ( !qwglMakeCurrent( dc.m_hDC, win32.hGLRC ) ) {
+	if( !qwglMakeCurrent( dc.m_hDC, win32.hGLRC ) )
+	{
 		common->Printf( "ERROR: wglMakeCurrent failed..\n " );
 		common->Printf( "Please restart " EDITOR_WINDOWTEXT " if the Z view is not working\n" );
-	} else {
+	}
+	else
+	{
 		QE_CheckOpenGLForErrors();
 
-		Z_Draw ();
+		Z_Draw();
 		//qwglSwapBuffers( m_dcZ );
 		qwglSwapBuffers( dc.m_hDC );
 		TRACE( "Z Paint\n" );
 	}
 }
 
-void CZWnd::OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI ) {
+void CZWnd::OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI )
+{
 	lpMMI->ptMinTrackSize.x = ZWIN_WIDTH;
 }
 
-void CZWnd::OnMouseMove( UINT nFlags, CPoint point ) {
+void CZWnd::OnMouseMove( UINT nFlags, CPoint point )
+{
 	CRect rctZ;
 	GetClientRect( rctZ );
 	float fz = z.origin[2] + ( ( rctZ.Height() - 1 - point.y ) - ( z.height / 2 ) ) / z.scale;
@@ -183,106 +203,131 @@ void CZWnd::OnMouseMove( UINT nFlags, CPoint point ) {
 	Z_MouseMoved( point.x, rctZ.Height() - 1 - point.y, nFlags );
 }
 
-void CZWnd::OnSize( UINT nType, int cx, int cy ) {
+void CZWnd::OnSize( UINT nType, int cx, int cy )
+{
 	CWnd::OnSize( nType, cx, cy );
 	CRect rctZ;
 	GetClientRect( rctZ );
 	z.width = rctZ.right;
 	z.height = rctZ.bottom;
-	if ( z.width < 10 ) {
+	if( z.width < 10 )
+	{
 		z.width = 10;
 	}
-	if ( z.height < 10 ) {
+	if( z.height < 10 )
+	{
 		z.height = 10;
 	}
 	Invalidate();
 }
 
 // ---> sikk - Window Snapping
-void CZWnd::OnSizing( UINT nSide, LPRECT lpRect ) {
-	if ( TryDocking( GetSafeHwnd(), nSide, lpRect, 0 ) ) {
+void CZWnd::OnSizing( UINT nSide, LPRECT lpRect )
+{
+	if( TryDocking( GetSafeHwnd(), nSide, lpRect, 0 ) )
+	{
 		return;
 	}
 }
-void CZWnd::OnMoving( UINT nSide, LPRECT lpRect ) {
-	if ( TryDocking( GetSafeHwnd(), nSide, lpRect, 0 ) ) {
+void CZWnd::OnMoving( UINT nSide, LPRECT lpRect )
+{
+	if( TryDocking( GetSafeHwnd(), nSide, lpRect, 0 ) )
+	{
 		return;
 	}
 }
 // <--- sikk - Window Snapping
 
-void CZWnd::OnNcCalcSize( BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp ) {
+void CZWnd::OnNcCalcSize( BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp )
+{
 	CWnd::OnNcCalcSize( bCalcValidRects, lpncsp );
 }
 
-void CZWnd::OnKillFocus( CWnd* pNewWnd ) {
+void CZWnd::OnKillFocus( CWnd* pNewWnd )
+{
 	CWnd::OnKillFocus( pNewWnd );
 	SendMessage( WM_NCACTIVATE, FALSE , 0 );
 }
 
-void CZWnd::OnSetFocus( CWnd* pOldWnd ) {
+void CZWnd::OnSetFocus( CWnd* pOldWnd )
+{
 	CWnd::OnSetFocus( pOldWnd );
 	SendMessage( WM_NCACTIVATE, TRUE , 0 );
 }
 
-void CZWnd::OnClose() {
+void CZWnd::OnClose()
+{
 	CWnd::OnClose();
 }
 
-void CZWnd::OnLButtonUp( UINT nFlags, CPoint point ) {
+void CZWnd::OnLButtonUp( UINT nFlags, CPoint point )
+{
 	CRect rctZ;
 	GetClientRect( rctZ );
 	Z_MouseUp( point.x, rctZ.bottom - 1 - point.y, nFlags );
-	if ( !( nFlags & ( MK_LBUTTON | MK_RBUTTON | MK_MBUTTON ) ) ) {
+	if( !( nFlags & ( MK_LBUTTON | MK_RBUTTON | MK_MBUTTON ) ) )
+	{
 		ReleaseCapture();
 	}
 }
 
-void CZWnd::OnMButtonUp( UINT nFlags, CPoint point ) {
+void CZWnd::OnMButtonUp( UINT nFlags, CPoint point )
+{
 	CRect rctZ;
 	GetClientRect( rctZ );
 	Z_MouseUp( point.x, rctZ.bottom - 1 - point.y, nFlags );
-	if ( !( nFlags & ( MK_LBUTTON | MK_RBUTTON | MK_MBUTTON ) ) ) {
+	if( !( nFlags & ( MK_LBUTTON | MK_RBUTTON | MK_MBUTTON ) ) )
+	{
 		ReleaseCapture();
 	}
 }
 
-void CZWnd::OnRButtonUp( UINT nFlags, CPoint point ) {
+void CZWnd::OnRButtonUp( UINT nFlags, CPoint point )
+{
 	CRect rctZ;
 	GetClientRect( rctZ );
 	Z_MouseUp( point.x, rctZ.bottom - 1 - point.y, nFlags );
-	if ( !( nFlags & ( MK_LBUTTON | MK_RBUTTON | MK_MBUTTON ) ) ) {
+	if( !( nFlags & ( MK_LBUTTON | MK_RBUTTON | MK_MBUTTON ) ) )
+	{
 		ReleaseCapture();
 	}
 }
 
-BOOL CZWnd::OnMouseWheel( UINT nFlags, short zDelta, CPoint pt ) {
-	if ( zDelta > 0 ) {
+BOOL CZWnd::OnMouseWheel( UINT nFlags, short zDelta, CPoint pt )
+{
+	if( zDelta > 0 )
+	{
 		g_pParentWnd->OnViewZzoomin();
-	} else {
+	}
+	else
+	{
 		g_pParentWnd->OnViewZzoomout();
 	}
 	return TRUE;
 }
 
-BOOL CZWnd::PreCreateWindow( CREATESTRUCT& cs ) {
+BOOL CZWnd::PreCreateWindow( CREATESTRUCT& cs )
+{
 	WNDCLASS wc;
 	HINSTANCE hInstance = AfxGetInstanceHandle();
-	if ( ::GetClassInfo( hInstance, Z_WINDOW_CLASS, &wc ) == FALSE ) {
+	if( ::GetClassInfo( hInstance, Z_WINDOW_CLASS, &wc ) == FALSE )
+	{
 		// Register a new class
 		memset( &wc, 0, sizeof( wc ) );
 		wc.style         = CS_NOCLOSE;// | CS_OWNDC;
 		wc.lpszClassName = Z_WINDOW_CLASS;
 		wc.hCursor       = LoadCursor( NULL, IDC_ARROW );
 		wc.lpfnWndProc	 = ::DefWindowProc;
-		if ( AfxRegisterClass( &wc ) == FALSE ) {
-			Error("CZWnd RegisterClass: failed");
+		if( AfxRegisterClass( &wc ) == FALSE )
+		{
+			Error( "CZWnd RegisterClass: failed" );
 		}
 	}
 
 	cs.lpszClass = Z_WINDOW_CLASS;
 	cs.lpszName = "Z View";
-	if ( cs.style != QE3_CHILDSTYLE ) {
+	if( cs.style != QE3_CHILDSTYLE )
+	{
 		cs.style = QE3_SPLITTER_STYLE;
 	}
 	cs.dwExStyle = WS_EX_TOOLWINDOW;	// sikk - Added - Tool window uses smaller tital bar (more screen space for editing)
@@ -301,7 +346,8 @@ z_t z;
 CZWnd::Z_Init
 ==============
 */
-void CZWnd::Z_Init( void ) {
+void CZWnd::Z_Init()
+{
 	z.origin[0] = 0;
 	z.origin[1] = 0;
 	z.origin[2] = 0;
@@ -317,9 +363,10 @@ static int	cursorx, cursory;
 CZWnd::Z_MouseDown
 ==============
 */
-void CZWnd::Z_MouseDown( int x, int y, int buttons ) {
+void CZWnd::Z_MouseDown( int x, int y, int buttons )
+{
 	idVec3	org, dir, vup, vright;
-	brush_t *b;
+	brush_t* b;
 
 	Sys_GetCursorPos( &cursorx, &cursory );
 
@@ -332,7 +379,8 @@ void CZWnd::Z_MouseDown( int x, int y, int buttons ) {
 	org[1] = MIN_WORLD_COORD;
 
 	b = selected_brushes.next;
-	if ( b != &selected_brushes ) {
+	if( b != &selected_brushes )
+	{
 		org[0] = ( b->mins[0] + b->maxs[0] ) / 2;
 	}
 
@@ -345,47 +393,55 @@ void CZWnd::Z_MouseDown( int x, int y, int buttons ) {
 	vright[2] = 0;
 
 	// new mouse code for ZClip, I'll do this stuff before falling through into the standard ZWindow mouse code...
-	if ( g_pParentWnd->GetZWnd()->m_pZClip ) {	// should always be the case I think, but this is safer
+	if( g_pParentWnd->GetZWnd()->m_pZClip )  	// should always be the case I think, but this is safer
+	{
 		bool bToggle = false;
 		bool bSetTop = false;
 		bool bSetBot = false;
 		bool bReset  = false;
 
-		if ( g_PrefsDlg.m_nMouseButtons == 2 ) {
+		if( g_PrefsDlg.m_nMouseButtons == 2 )
+		{
 			// 2 button mice...
 			bToggle = ( GetKeyState( VK_F1 ) & 0x8000 ) != 0;
 			bSetTop = ( GetKeyState( VK_F2 ) & 0x8000 ) != 0;
 			bSetBot = ( GetKeyState( VK_F3 ) & 0x8000 ) != 0;
 			bReset  = ( GetKeyState( VK_F4 ) & 0x8000 ) != 0;
-		} else {	
+		}
+		else
+		{
 			// 3 button mice...
 			bToggle = ( buttons == ( MK_RBUTTON | MK_SHIFT | MK_CONTROL ) );
 			bSetTop = ( buttons == ( MK_RBUTTON | MK_SHIFT ) );
 			bSetBot = ( buttons == ( MK_RBUTTON | MK_CONTROL ) );
 			bReset  = ( GetKeyState( VK_F4 ) & 0x8000 ) != 0;
-		}				
-		
-		if ( bToggle ) {
+		}
+
+		if( bToggle )
+		{
 			g_pParentWnd->GetZWnd()->m_pZClip->Enable( !( g_pParentWnd->GetZWnd()->m_pZClip->IsEnabled() ) );
-		    Sys_UpdateWindows( W_ALL );
+			Sys_UpdateWindows( W_ALL );
 			return;
 		}
 
-		if ( bSetTop ) {
+		if( bSetTop )
+		{
 			g_pParentWnd->GetZWnd()->m_pZClip->SetTop( org[2] );
-		    Sys_UpdateWindows( W_ALL );
-			return;
-		}
-		
-		if ( bSetBot ) {
-			g_pParentWnd->GetZWnd()->m_pZClip->SetBottom( org[2] );
-		    Sys_UpdateWindows( W_ALL );
+			Sys_UpdateWindows( W_ALL );
 			return;
 		}
 
-		if ( bReset ) {
+		if( bSetBot )
+		{
+			g_pParentWnd->GetZWnd()->m_pZClip->SetBottom( org[2] );
+			Sys_UpdateWindows( W_ALL );
+			return;
+		}
+
+		if( bReset )
+		{
 			g_pParentWnd->GetZWnd()->m_pZClip->Reset();
-		    Sys_UpdateWindows( W_ALL );
+			Sys_UpdateWindows( W_ALL );
 			return;
 		}
 	}
@@ -403,16 +459,18 @@ void CZWnd::Z_MouseDown( int x, int y, int buttons ) {
 	//       ctrl-RIGHT button = set ZClip bottom marker
 
 	int nMouseButton = g_PrefsDlg.m_nMouseButtons == 2 ? MK_RBUTTON : MK_MBUTTON;
-	if ( ( buttons == MK_LBUTTON ) ||
-		 ( buttons == ( MK_LBUTTON | MK_SHIFT ) ) ||
-		 ( buttons == MK_MBUTTON ) || //(buttons == (MK_MBUTTON|MK_CONTROL)) ||
-		 ( buttons == ( nMouseButton | MK_SHIFT | MK_CONTROL ) ) ) {
+	if( ( buttons == MK_LBUTTON ) ||
+			( buttons == ( MK_LBUTTON | MK_SHIFT ) ) ||
+			( buttons == MK_MBUTTON ) || //(buttons == (MK_MBUTTON|MK_CONTROL)) ||
+			( buttons == ( nMouseButton | MK_SHIFT | MK_CONTROL ) ) )
+	{
 		Drag_Begin( x, y, buttons, vright, vup, org, dir );
 		return;
 	}
 
 	// control mbutton = move camera
-	if ( ( buttons == ( MK_CONTROL | nMouseButton ) ) || ( buttons == ( MK_CONTROL | MK_LBUTTON ) ) ) {
+	if( ( buttons == ( MK_CONTROL | nMouseButton ) ) || ( buttons == ( MK_CONTROL | MK_LBUTTON ) ) )
+	{
 		g_pParentWnd->GetCamera()->Camera().origin[2] = org[2];
 		Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY | W_Z );
 	}
@@ -423,9 +481,10 @@ void CZWnd::Z_MouseDown( int x, int y, int buttons ) {
 CZWnd::Z_MouseUp
 ==============
 */
-void CZWnd::Z_MouseUp( int x, int y, int buttons ) {
+void CZWnd::Z_MouseUp( int x, int y, int buttons )
+{
 	Drag_MouseUp();
-	while ( ::ShowCursor(TRUE) < 0 )
+	while( ::ShowCursor( TRUE ) < 0 )
 		;
 }
 
@@ -434,22 +493,28 @@ void CZWnd::Z_MouseUp( int x, int y, int buttons ) {
 CZWnd::Z_MouseMoved
 ==============
 */
-void CZWnd::Z_MouseMoved( int x, int y, int buttons ) {
-	if ( !buttons ) {
+void CZWnd::Z_MouseMoved( int x, int y, int buttons )
+{
+	if( !buttons )
+	{
 		return;
 	}
 
-	if ( buttons == MK_LBUTTON ) {
+	if( buttons == MK_LBUTTON )
+	{
 		Drag_MouseMoved( x, y, buttons );
 		Sys_UpdateWindows( W_Z | W_CAMERA_ICON | W_XY );
 		return;
 	}
 
 	// rbutton = drag z origin
-	if ( buttons == MK_RBUTTON ) {
-		if ( !( GetAsyncKeyState( VK_MENU ) & 0x8000 ) ) {
+	if( buttons == MK_RBUTTON )
+	{
+		if( !( GetAsyncKeyState( VK_MENU ) & 0x8000 ) )
+		{
 			Sys_GetCursorPos( &x, &y );
-			if ( y != cursory ) {
+			if( y != cursory )
+			{
 				z.origin[2] += ( y - cursory ) / z.scale;	// sikk - Added "/ z.scale"
 				::ShowCursor( FALSE );
 				Sys_SetCursorPos( cursorx, cursory );
@@ -462,14 +527,18 @@ void CZWnd::Z_MouseMoved( int x, int y, int buttons ) {
 
 // ---> sikk - Mouse Zoom
 	// rbutton + lbutton = zoom z view
-	if ( buttons == ( MK_RBUTTON | MK_LBUTTON ) || ( buttons == MK_RBUTTON && ( GetAsyncKeyState( VK_MENU ) & 0x8000 ) ) ) {
+	if( buttons == ( MK_RBUTTON | MK_LBUTTON ) || ( buttons == MK_RBUTTON && ( GetAsyncKeyState( VK_MENU ) & 0x8000 ) ) )
+	{
 		Sys_GetCursorPos( &x, &y );
-		if ( y != cursory ) {
+		if( y != cursory )
+		{
 			z.scale += ( y - cursory ) * z.scale * 0.00390625f;
-			if ( z.scale > 64.0f ) {
+			if( z.scale > 64.0f )
+			{
 				z.scale = 64.0f;
 			}
-			if ( z.scale < 0.003125f ) {
+			if( z.scale < 0.003125f )
+			{
 				z.scale =  0.003125f;
 			}
 			::ShowCursor( FALSE );
@@ -483,7 +552,8 @@ void CZWnd::Z_MouseMoved( int x, int y, int buttons ) {
 
 	// control mbutton = move camera
 	int nMouseButton = g_PrefsDlg.m_nMouseButtons == 2 ? MK_RBUTTON : MK_MBUTTON;
-	if ( ( buttons == ( MK_CONTROL | nMouseButton ) ) || ( buttons == ( MK_CONTROL | MK_LBUTTON ) ) ) {	
+	if( ( buttons == ( MK_CONTROL | nMouseButton ) ) || ( buttons == ( MK_CONTROL | MK_LBUTTON ) ) )
+	{
 		g_pParentWnd->GetCamera()->Camera().origin[2] = z.origin[2] + ( y - ( z.height / 2 ) ) / z.scale;
 		Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY | W_Z );
 	}
@@ -494,7 +564,8 @@ void CZWnd::Z_MouseMoved( int x, int y, int buttons ) {
 CZWnd::Z_DrawGrid
 ==============
 */
-void CZWnd::Z_DrawGrid( void ) {
+void CZWnd::Z_DrawGrid()
+{
 	float	zz, zb, ze;
 	int		w, h;
 	char	text[ 32 ];
@@ -506,37 +577,44 @@ void CZWnd::Z_DrawGrid( void ) {
 //	int nSize = 1.0f / g_qeglobals.d_gridsize * 256;
 	float fScale = 1.0f / g_qeglobals.d_gridsize * 8;
 	int stepSize = g_qeglobals.d_gridsize * 8 * fScale / 2 / z.scale;
-	if ( stepSize < g_qeglobals.d_gridsize * 8 ) {
+	if( stepSize < g_qeglobals.d_gridsize * 8 )
+	{
 		stepSize = g_qeglobals.d_gridsize * 8;
-	} else {
+	}
+	else
+	{
 		int i;
-		for ( i = 1; i < stepSize; i <<= 1 ) {}
+		for( i = 1; i < stepSize; i <<= 1 ) {}
 		stepSize = i;
 	}
 //	int stepSize = max( 64, g_qeglobals.d_gridsize );	// sikk - Larger Grid Sizes - Added
 // <--- sikk - Fixed Grid
 
 	zb = z.origin[2] - h;
-	if ( zb < region_mins[ 2 ] ) {
+	if( zb < region_mins[ 2 ] )
+	{
 		zb = region_mins[ 2 ];
 	}
 	zb = stepSize * floor( zb / stepSize );				// sikk - Larger Grid Sizes	- was 64
 
 	ze = z.origin[2] + h;
-	if ( ze > region_maxs[ 2 ] ) {
+	if( ze > region_maxs[ 2 ] )
+	{
 		ze = region_maxs[ 2 ];
 	}
 	ze = stepSize * ceil( ze / stepSize );				// sikk - Larger Grid Sizes	- was 64
 
 	// draw minor blocks
-	if ( //z.scale > fScale &&	// sikk - Fixed grid
-		 g_qeglobals.d_showgrid &&
-		 //g_qeglobals.d_gridsize * z.scale >= 4 &&
-		!g_qeglobals.d_savedinfo.colors[ COLOR_GRIDMINOR ].Compare( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDBACK ] ) ) {
+	if(  //z.scale > fScale &&	// sikk - Fixed grid
+		g_qeglobals.d_showgrid &&
+		//g_qeglobals.d_gridsize * z.scale >= 4 &&
+		!g_qeglobals.d_savedinfo.colors[ COLOR_GRIDMINOR ].Compare( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDBACK ] ) )
+	{
 
 		qglColor3fv( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDMINOR ].ToFloatPtr() );
 		qglBegin( GL_LINES );
-		for ( zz = zb; zz < ze; zz += stepSize / 8 ) {
+		for( zz = zb; zz < ze; zz += stepSize / 8 )
+		{
 // ---> sikk - Fixed grid
 			//if ( !( (int)zz & 63 ) ) {
 			//	continue;
@@ -553,10 +631,14 @@ void CZWnd::Z_DrawGrid( void ) {
 	qglColor3fv( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDMAJOR ].ToFloatPtr() );
 	qglVertex2f( 0, zb );
 	qglVertex2f( 0, ze );
-	for ( zz = zb; zz < ze; zz += stepSize ) {			// sikk - Larger Grid Sizes	- was 64
-		if ( zz == 0 ) { 
+	for( zz = zb; zz < ze; zz += stepSize )  			// sikk - Larger Grid Sizes	- was 64
+	{
+		if( zz == 0 )
+		{
 			qglColor3fv( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDTEXT ].ToFloatPtr() );
-		} else {
+		}
+		else
+		{
 			qglColor3fv( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDMAJOR ].ToFloatPtr() );
 		}
 		qglVertex2f( -w, zz );
@@ -567,9 +649,10 @@ void CZWnd::Z_DrawGrid( void ) {
 	// draw coordinate text if needed
 	qglColor3fv( g_qeglobals.d_savedinfo.colors[ COLOR_GRIDTEXT ].ToFloatPtr() );
 
-	for ( zz = zb; zz < ze; zz += stepSize ) {
+	for( zz = zb; zz < ze; zz += stepSize )
+	{
 		qglRasterPos2f( -w + 1, zz );
-		sprintf( text, "%i", (int)zz );
+		sprintf( text, "%i", ( int )zz );
 		qglCallLists( strlen( text ), GL_UNSIGNED_BYTE, text );
 	}
 }
@@ -582,9 +665,10 @@ void CZWnd::Z_DrawGrid( void ) {
 CZWnd::Z_DrawCameraIcon
 ==============
 */
-void CZWnd::Z_DrawCameraIcon( void ) {
+void CZWnd::Z_DrawCameraIcon()
+{
 	float	x, y;
-	int		xCam = z.width / 4 / z.scale;	// sikk - 
+	int		xCam = z.width / 4 / z.scale;	// sikk -
 
 	x = 0;
 	y = g_pParentWnd->GetCamera()->Camera().origin[2];
@@ -608,13 +692,15 @@ void CZWnd::Z_DrawCameraIcon( void ) {
 CZWnd::Z_DrawZClip
 ==============
 */
-void CZWnd::Z_DrawZClip( void ) {
+void CZWnd::Z_DrawZClip()
+{
 	float x, y;
-	
+
 	x = 0;
 	y = g_pParentWnd->GetCamera()->Camera().origin[2];
 
-	if ( g_pParentWnd->GetZWnd()->m_pZClip ) {	// should always be the case I think
+	if( g_pParentWnd->GetZWnd()->m_pZClip )  	// should always be the case I think
+	{
 		g_pParentWnd->GetZWnd()->m_pZClip->Paint();
 	}
 }
@@ -626,14 +712,16 @@ GLbitfield glbitClear = GL_COLOR_BUFFER_BIT;	// HACK
 CZWnd::Z_Draw
 ==============
 */
-void CZWnd::Z_Draw( void ) {
-	brush_t		*brush;
+void CZWnd::Z_Draw()
+{
+	brush_t*		brush;
 	float		w, h;
 	float		top, bottom;
 	idVec3		org_top, org_bottom, dir_up, dir_down;
 	int			xCam = z.width / 3 / z.scale;	// sikk - Keep brush widths proportional to window
 
-	if ( !active_brushes.next ) {
+	if( !active_brushes.next )
+	{
 		return; // not valid yet
 	}
 
@@ -692,20 +780,24 @@ void CZWnd::Z_Draw( void ) {
 	VectorCopy( z.origin, org_bottom );
 	org_bottom[2] = -4096;
 
-	for ( brush = active_brushes.next; brush != &active_brushes; brush = brush->next ) {
-		if ( brush->mins[0] >= z.origin[0] ||
-			 brush->maxs[0] <= z.origin[0] ||
-			 brush->mins[1] >= z.origin[1] ||
-			 brush->maxs[1] <= z.origin[1] ) {
+	for( brush = active_brushes.next; brush != &active_brushes; brush = brush->next )
+	{
+		if( brush->mins[0] >= z.origin[0] ||
+				brush->maxs[0] <= z.origin[0] ||
+				brush->mins[1] >= z.origin[1] ||
+				brush->maxs[1] <= z.origin[1] )
+		{
 			continue;
 		}
 
-		if ( !Brush_Ray( org_top, dir_down, brush, &top ) ) {
+		if( !Brush_Ray( org_top, dir_down, brush, &top ) )
+		{
 			continue;
 		}
 
 		top = org_top[2] - top;
-		if ( !Brush_Ray( org_bottom, dir_up, brush, &bottom ) ) {
+		if( !Brush_Ray( org_bottom, dir_up, brush, &bottom ) )
+		{
 			continue;
 		}
 
@@ -730,14 +822,18 @@ void CZWnd::Z_Draw( void ) {
 	}
 
 	// now draw selected brushes
-	for ( brush = selected_brushes.next; brush != &selected_brushes; brush = brush->next ) {
-		if ( !( brush->mins[0] >= z.origin[0] ||
+	for( brush = selected_brushes.next; brush != &selected_brushes; brush = brush->next )
+	{
+		if( !( brush->mins[0] >= z.origin[0] ||
 				brush->maxs[0] <= z.origin[0] ||
 				brush->mins[1] >= z.origin[1] ||
-				brush->maxs[1] <= z.origin[1] ) ) {
-			if ( Brush_Ray( org_top, dir_down, brush, &top ) ) {
+				brush->maxs[1] <= z.origin[1] ) )
+		{
+			if( Brush_Ray( org_top, dir_down, brush, &top ) )
+			{
 				top = org_top[2] - top;
-				if ( Brush_Ray( org_bottom, dir_up, brush, &bottom ) ) {
+				if( Brush_Ray( org_bottom, dir_up, brush, &bottom ) )
+				{
 					bottom = org_bottom[2] + bottom;
 
 					//q = declManager->FindMaterial( brush->brush_faces->texdef.name );
@@ -775,11 +871,15 @@ void CZWnd::Z_Draw( void ) {
 CZWnd::PositionView
 ==============
 */
-void CZWnd::PositionView() {
-	brush_t *b = selected_brushes.next;
-	if ( b && b->next != b ) {
+void CZWnd::PositionView()
+{
+	brush_t* b = selected_brushes.next;
+	if( b && b->next != b )
+	{
 		z.origin[2] = ( b->maxs[2] - b->mins[2] ) * 0.5f + b->mins[2];
-	} else {
+	}
+	else
+	{
 		z.origin[2] = g_pParentWnd->GetCamera()->Camera().origin[2];
 	}
 }

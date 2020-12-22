@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,9 +38,9 @@ If you have questions concerning this license or the applicable additional terms
 #include <ddeml.h>  // for MSGF_DDEMGR
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
+	#define new DEBUG_NEW
+	#undef THIS_FILE
+	static char THIS_FILE[] = __FILE__;
 #endif
 
 idCVar radiant_entityMode( "radiant_entityMode", "0", CVAR_TOOL | CVAR_ARCHIVE, "" );
@@ -48,15 +48,15 @@ idCVar radiant_entityMode( "radiant_entityMode", "0", CVAR_TOOL | CVAR_ARCHIVE, 
 /////////////////////////////////////////////////////////////////////////////
 // CRadiantApp
 
-BEGIN_MESSAGE_MAP(CRadiantApp, CWinApp)
+BEGIN_MESSAGE_MAP( CRadiantApp, CWinApp )
 	//{{AFX_MSG_MAP(CRadiantApp)
-	ON_COMMAND(ID_HELP, OnHelp)
+	ON_COMMAND( ID_HELP, OnHelp )
 	//}}AFX_MSG_MAP
 	// Standard file based document commands
-	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
-	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
+	ON_COMMAND( ID_FILE_NEW, CWinApp::OnFileNew )
+	ON_COMMAND( ID_FILE_OPEN, CWinApp::OnFileOpen )
 	// Standard print setup command
-	ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
+	ON_COMMAND( ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup )
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -67,7 +67,8 @@ END_MESSAGE_MAP()
 CRadiantApp::CRadiantApp
 ================
 */
-CRadiantApp::CRadiantApp( void ) {
+CRadiantApp::CRadiantApp()
+{
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -82,9 +83,12 @@ bool g_editorAlive = false;
 RadiantPrint
 ================
 */
-void RadiantPrint( const char *text ) {
-	if ( g_editorAlive && g_Inspectors ) {
-		if (g_Inspectors->consoleWnd.GetSafeHwnd()) {
+void RadiantPrint( const char* text )
+{
+	if( g_editorAlive && g_Inspectors )
+	{
+		if( g_Inspectors->consoleWnd.GetSafeHwnd() )
+		{
 			g_Inspectors->consoleWnd.AddText( text );
 		}
 	}
@@ -95,7 +99,8 @@ void RadiantPrint( const char *text ) {
 RadiantShutdown
 ================
 */
-void RadiantShutdown( void ) {
+void RadiantShutdown()
+{
 	theApp.ExitInstance();
 }
 
@@ -106,9 +111,11 @@ RadiantInit
 This is also called when you 'quit' in doom
 =================
 */
-void RadiantInit( void ) {
+void RadiantInit()
+{
 	// make sure the renderer is initialized
-	if ( !renderSystem->IsOpenGLRunning() ) {
+	if( !renderSystem->IsOpenGLRunning() )
+	{
 		common->Printf( "no OpenGL running\n" );
 		return;
 	}
@@ -116,26 +123,32 @@ void RadiantInit( void ) {
 	g_editorAlive = true;
 
 	// allocate a renderWorld and a soundWorld
-	if ( g_qeglobals.rw == NULL ) {
+	if( g_qeglobals.rw == NULL )
+	{
 		g_qeglobals.rw = renderSystem->AllocRenderWorld();
 		g_qeglobals.rw->InitFromMap( NULL );
 	}
-	if ( g_qeglobals.sw == NULL ) {
+	if( g_qeglobals.sw == NULL )
+	{
 		g_qeglobals.sw = soundSystem->AllocSoundWorld( g_qeglobals.rw );
 	}
 
-	if ( g_DoomInstance ) {
-		if ( ::IsWindowVisible( win32.hWnd ) ) {
+	if( g_DoomInstance )
+	{
+		if( ::IsWindowVisible( win32.hWnd ) )
+		{
 			::ShowWindow( win32.hWnd, SW_HIDE );
 			g_pParentWnd->ShowWindow( SW_SHOW );
 			g_pParentWnd->SetFocus();
 		}
-	} else {
+	}
+	else
+	{
 		Sys_GrabMouseCursor( false );
 
 		g_DoomInstance = win32.hInstance;
 		CWinApp* pApp = AfxGetApp();
-		CWinThread *pThread = AfxGetThread();
+		CWinThread* pThread = AfxGetThread();
 
 		InitAfx();
 
@@ -147,26 +160,29 @@ void RadiantInit( void ) {
 
 		qglFinish();
 		//qwglMakeCurrent(0, 0);
-		qwglMakeCurrent(win32.hDC, win32.hGLRC);
+		qwglMakeCurrent( win32.hDC, win32.hGLRC );
 
 		// hide the doom window by default
 		::ShowWindow( win32.hWnd, SW_HIDE );
 	}
 }
 
-extern void Map_VerifyCurrentMap(const char *map);
+extern void Map_VerifyCurrentMap( const char* map );
 
 /*
 ================
 RadiantSync
 ================
 */
-void RadiantSync( const char *mapName, const idVec3 &viewOrg, const idAngles &viewAngles ) {
-	if ( g_DoomInstance == NULL ) {
+void RadiantSync( const char* mapName, const idVec3& viewOrg, const idAngles& viewAngles )
+{
+	if( g_DoomInstance == NULL )
+	{
 		RadiantInit();
 	}
 
-	if ( g_DoomInstance ) {
+	if( g_DoomInstance )
+	{
 		idStr osPath;
 		osPath = fileSystem->RelativePathToOSPath( mapName );
 		Map_VerifyCurrentMap( osPath );
@@ -184,12 +200,15 @@ void RadiantSync( const char *mapName, const idVec3 &viewOrg, const idAngles &vi
 RadiantRun
 ================
 */
-void RadiantRun( void ) {
+void RadiantRun()
+{
 	static bool exceptionErr = false;
-	int show = ::IsWindowVisible(win32.hWnd);
+	int show = ::IsWindowVisible( win32.hWnd );
 
-	try {
-		if ( !exceptionErr && !show ) {
+	try
+	{
+		if( !exceptionErr && !show )
+		{
 			//qglPushAttrib(GL_ALL_ATTRIB_BITS);
 			qglDepthMask( true );
 			theApp.Run();
@@ -197,7 +216,9 @@ void RadiantRun( void ) {
 			//qwglMakeCurrent(0, 0);
 			qwglMakeCurrent( win32.hDC, win32.hGLRC );
 		}
-	} catch ( idException &ex ) {
+	}
+	catch( idException& ex )
+	{
 		::MessageBox( NULL, ex.error, "Exception error", MB_OK );
 		RadiantShutdown();
 	}
@@ -215,7 +236,8 @@ bool g_bBuildList = false;
 CRadiantApp::InitInstance
 ================
 */
-BOOL CRadiantApp::InitInstance( void ) {
+BOOL CRadiantApp::InitInstance()
+{
 	//g_hOpenGL32 = ::LoadLibrary("opengl32.dll");
 	// AfxEnableControlContainer();
 
@@ -223,7 +245,7 @@ BOOL CRadiantApp::InitInstance( void ) {
 	// If you are not using these features and wish to reduce the size
 	//  of your final executable, you should remove from the following
 	//  the specific initialization routines you do not need.
-  //AfxEnableMemoryTracking(FALSE);
+	//AfxEnableMemoryTracking(FALSE);
 
 #ifdef _AFXDLL
 	//Enable3dControls();			// Call this when using MFC in a shared DLL
@@ -246,46 +268,55 @@ BOOL CRadiantApp::InitInstance( void ) {
 	CString IniPath = Root + "\\REGISTRY.INI";
 	// search for ini file
 	Finder.FindNextFile();
-	if ( Finder.FindFile( IniPath ) ) {
+	if( Finder.FindFile( IniPath ) )
+	{
 		Finder.FindNextFile();
 		// use the .ini file instead of the registry
-		free( (void*)m_pszProfileName );
-		m_pszProfileName=_tcsdup( _T( Finder.GetFilePath() ) );
+		free( ( void* )m_pszProfileName );
+		m_pszProfileName = _tcsdup( _T( Finder.GetFilePath() ) );
 		// look for the registry key for void* buffers storage ( these can't go into .INI files )
-		int i=0;
+		int i = 0;
 		CString key;
 		HKEY hkResult;
 		DWORD dwDisp;
 		DWORD type;
 		char iBuf[3];
-		do {
+		do
+		{
 			sprintf( iBuf, "%d", i );
-			key = "Software\\Q3Radiant\\IniPrefs" + CString(iBuf);
+			key = "Software\\Q3Radiant\\IniPrefs" + CString( iBuf );
 			// does this key exists ?
-			if ( RegOpenKeyEx( HKEY_CURRENT_USER, key, 0, KEY_ALL_ACCESS, &hkResult ) != ERROR_SUCCESS ) {
+			if( RegOpenKeyEx( HKEY_CURRENT_USER, key, 0, KEY_ALL_ACCESS, &hkResult ) != ERROR_SUCCESS )
+			{
 				// this key doesn't exist, so it's the one we'll use
-				strcpy( g_qeglobals.use_ini_registry, key.GetBuffer(0) );
-				RegCreateKeyEx( HKEY_CURRENT_USER, key, 0, NULL, 
-					REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkResult, &dwDisp );
-				RegSetValueEx( hkResult, "RadiantName", 0, REG_SZ, reinterpret_cast<CONST BYTE *>( RadiantPath ), strlen( RadiantPath ) + 1 );
+				strcpy( g_qeglobals.use_ini_registry, key.GetBuffer( 0 ) );
+				RegCreateKeyEx( HKEY_CURRENT_USER, key, 0, NULL,
+								REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkResult, &dwDisp );
+				RegSetValueEx( hkResult, "RadiantName", 0, REG_SZ, reinterpret_cast<CONST BYTE*>( RadiantPath ), strlen( RadiantPath ) + 1 );
 				RegCloseKey( hkResult );
 				break;
-			} else {
+			}
+			else
+			{
 				char RadiantAux[ _MAX_PATH ];
 				unsigned long size = _MAX_PATH;
 				// the key exists, is it the one we are looking for ?
-				RegQueryValueEx( hkResult, "RadiantName", 0, &type, reinterpret_cast<BYTE *>( RadiantAux ), &size );
+				RegQueryValueEx( hkResult, "RadiantName", 0, &type, reinterpret_cast<BYTE*>( RadiantAux ), &size );
 				RegCloseKey( hkResult );
-				if ( !strcmp( RadiantAux, RadiantPath ) ) {
+				if( !strcmp( RadiantAux, RadiantPath ) )
+				{
 					// got it !
 					strcpy( g_qeglobals.use_ini_registry, key.GetBuffer( 0 ) );
 					break;
 				}
 			}
 			i++;
-		} while ( 1 );
+		}
+		while( 1 );
 		g_qeglobals.use_ini = true;
-	} else {
+	}
+	else
+	{
 		// Change the registry key under which our settings are stored.
 		SetRegistryKey( EDITOR_REGISTRY_KEY );
 		g_qeglobals.use_ini = false;
@@ -313,19 +344,22 @@ BOOL CRadiantApp::InitInstance( void ) {
 
 	CString strTemp = m_lpCmdLine;
 	strTemp.MakeLower();
-	if ( strTemp.Find( "builddefs" ) >= 0 ) {
+	if( strTemp.Find( "builddefs" ) >= 0 )
+	{
 		g_bBuildList = true;
 	}
 
 	CMainFrame* pMainFrame = new CMainFrame;
-	if ( !pMainFrame->LoadFrame( IDR_MAINFRAME ) ) {	// sikk - Changed from "IDR_MENU_QUAKE3"
+	if( !pMainFrame->LoadFrame( IDR_MAINFRAME ) )  	// sikk - Changed from "IDR_MENU_QUAKE3"
+	{
 		return FALSE;
 	}
 
-	if ( pMainFrame->m_hAccelTable ) {
+	if( pMainFrame->m_hAccelTable )
+	{
 		::DestroyAcceleratorTable( pMainFrame->m_hAccelTable );
 	}
-  
+
 	pMainFrame->LoadAccelTable( MAKEINTRESOURCE( IDR_MINIACCEL ) );
 
 	m_pMainWnd = pMainFrame;
@@ -345,7 +379,8 @@ BOOL CRadiantApp::InitInstance( void ) {
 CRadiantApp::ExitInstance
 ================
 */
-int CRadiantApp::ExitInstance( void ) {
+int CRadiantApp::ExitInstance()
+{
 	common->Shutdown();
 	g_pParentWnd = NULL;
 	int ret = CWinApp::ExitInstance();
@@ -358,8 +393,10 @@ int CRadiantApp::ExitInstance( void ) {
 CRadiantApp::OnIdle
 ================
 */
-BOOL CRadiantApp::OnIdle( LONG lCount ) {
-	if ( g_pParentWnd ) {
+BOOL CRadiantApp::OnIdle( LONG lCount )
+{
+	if( g_pParentWnd )
+	{
 		g_pParentWnd->RoutineProcessing();
 	}
 	return FALSE;
@@ -371,7 +408,8 @@ BOOL CRadiantApp::OnIdle( LONG lCount ) {
 CRadiantApp::OnHelp
 ================
 */
-void CRadiantApp::OnHelp( void ) {
+void CRadiantApp::OnHelp()
+{
 	ShellExecute( m_pMainWnd->GetSafeHwnd(), "open", "http://www.idDevNet.com", NULL, NULL, SW_SHOW );
 }
 
@@ -380,38 +418,45 @@ void CRadiantApp::OnHelp( void ) {
 CRadiantApp::Run
 ================
 */
-int CRadiantApp::Run( void ) {
+int CRadiantApp::Run()
+{
 	BOOL bIdle = TRUE;
 	LONG lIdleCount = 0;
 
 #if _MSC_VER >= 1300
-	MSG *msg = AfxGetCurrentMessage();			// TODO Robert fix me!!
+	MSG* msg = AfxGetCurrentMessage();			// TODO Robert fix me!!
 #else
-	MSG *msg = &m_msgCur;
+	MSG* msg = &m_msgCur;
 #endif
 
 	// phase1: check to see if we can do idle work
-	while ( bIdle && !::PeekMessage( msg, NULL, NULL, NULL, PM_NOREMOVE ) ) {
+	while( bIdle && !::PeekMessage( msg, NULL, NULL, NULL, PM_NOREMOVE ) )
+	{
 		// call OnIdle while in bIdle state
-		if ( !OnIdle( lIdleCount++ ) ) {
+		if( !OnIdle( lIdleCount++ ) )
+		{
 			bIdle = FALSE; // assume "no idle" state
 		}
 	}
 
 	// phase2: pump messages while available
-	do {
+	do
+	{
 		// pump message, but quit on WM_QUIT
-		if ( !PumpMessage() ) {
+		if( !PumpMessage() )
+		{
 			return ExitInstance();
 		}
 
 		// reset "no idle" state after pumping "normal" message
-		if ( IsIdleMessage( msg ) ) {
+		if( IsIdleMessage( msg ) )
+		{
 			bIdle = TRUE;
 			lIdleCount = 0;
 		}
 
-	} while ( ::PeekMessage( msg, NULL, NULL, NULL, PM_NOREMOVE ) );
+	}
+	while( ::PeekMessage( msg, NULL, NULL, NULL, PM_NOREMOVE ) );
 
 	return 0;
 }
@@ -430,7 +475,8 @@ REGISTRY INFO
 SaveRegistryInfo
 ================
 */
-bool SaveRegistryInfo( const char *pszName, void *pvBuf, long lSize ) {
+bool SaveRegistryInfo( const char* pszName, void* pvBuf, long lSize )
+{
 	SetCvarBinary( pszName, pvBuf, lSize );
 	common->WriteFlaggedCVarsToFile( "editor.cfg", CVAR_TOOL, "sett" );
 	return true;
@@ -441,7 +487,8 @@ bool SaveRegistryInfo( const char *pszName, void *pvBuf, long lSize ) {
 LoadRegistryInfo
 ================
 */
-bool LoadRegistryInfo( const char *pszName, void *pvBuf, long *plSize ) {
+bool LoadRegistryInfo( const char* pszName, void* pvBuf, long* plSize )
+{
 	return GetCvarBinary( pszName, pvBuf, *plSize );
 }
 
@@ -450,14 +497,17 @@ bool LoadRegistryInfo( const char *pszName, void *pvBuf, long *plSize ) {
 SaveWindowState
 ================
 */
-bool SaveWindowState( HWND hWnd, const char *pszName ) {
+bool SaveWindowState( HWND hWnd, const char* pszName )
+{
 	RECT rc;
 	GetWindowRect( hWnd, &rc );
-	if ( hWnd != g_pParentWnd->GetSafeHwnd() ) {
-	    if ( ::GetParent( hWnd ) != g_pParentWnd->GetSafeHwnd() ) {
+	if( hWnd != g_pParentWnd->GetSafeHwnd() )
+	{
+		if( ::GetParent( hWnd ) != g_pParentWnd->GetSafeHwnd() )
+		{
 			::SetParent( hWnd, g_pParentWnd->GetSafeHwnd() );
-	    }
-		MapWindowPoints( NULL, g_pParentWnd->GetSafeHwnd(), (POINT *)&rc, 2 );
+		}
+		MapWindowPoints( NULL, g_pParentWnd->GetSafeHwnd(), ( POINT* )&rc, 2 );
 	}
 	return SaveRegistryInfo( pszName, &rc, sizeof( rc ) );
 }
@@ -467,21 +517,27 @@ bool SaveWindowState( HWND hWnd, const char *pszName ) {
 LoadWindowState
 ================
 */
-bool LoadWindowState( HWND hWnd, const char *pszName ) {
+bool LoadWindowState( HWND hWnd, const char* pszName )
+{
 	RECT rc;
 	LONG lSize = sizeof( rc );
 
-	if ( LoadRegistryInfo( pszName, &rc, &lSize ) ) {
-		if ( rc.left < 0 ) {
+	if( LoadRegistryInfo( pszName, &rc, &lSize ) )
+	{
+		if( rc.left < 0 )
+		{
 			rc.left = 0;
 		}
-		if ( rc.top < 0 ) {
+		if( rc.top < 0 )
+		{
 			rc.top = 0;
 		}
-		if ( rc.right < rc.left + 16 ) {
+		if( rc.right < rc.left + 16 )
+		{
 			rc.right = rc.left + 16;
 		}
-		if ( rc.bottom < rc.top + 16 ) {
+		if( rc.bottom < rc.top + 16 )
+		{
 			rc.bottom = rc.top + 16;
 		}
 
@@ -505,7 +561,8 @@ bool LoadWindowState( HWND hWnd, const char *pszName ) {
 Sys_UpdateStatusBar
 ================
 */
-void Sys_UpdateStatusBar( void ) {
+void Sys_UpdateStatusBar()
+{
 	extern int g_numbrushes, g_numentities;
 
 	char numbrushbuffer[100] = "";
@@ -519,9 +576,11 @@ void Sys_UpdateStatusBar( void ) {
 Sys_Status
 ================
 */
-void Sys_Status( const char *psz, int part ) {
-	if ( part < 0 ) {
-		common->Printf("%s", psz);
+void Sys_Status( const char* psz, int part )
+{
+	if( part < 0 )
+	{
+		common->Printf( "%s", psz );
 		part = 0;
 	}
 	g_pParentWnd->SetStatusText( part, psz );

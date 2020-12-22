@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,9 +34,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "MapInfo.h"
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
+	#define new DEBUG_NEW
+	#undef THIS_FILE
+	static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,8 @@ static char THIS_FILE[] = __FILE__;
 
 
 CMapInfo::CMapInfo( CWnd* pParent /*=NULL*/ )
-	: CDialog( CMapInfo::IDD, pParent ) {
+	: CDialog( CMapInfo::IDD, pParent )
+{
 	//{{AFX_DATA_INIT(CMapInfo)
 	m_nNet = 0;
 	m_nTotalBrushes = 0;
@@ -52,7 +53,8 @@ CMapInfo::CMapInfo( CWnd* pParent /*=NULL*/ )
 	//}}AFX_DATA_INIT
 }
 
-void CMapInfo::DoDataExchange( CDataExchange* pDX ) {
+void CMapInfo::DoDataExchange( CDataExchange* pDX )
+{
 	CDialog::DoDataExchange( pDX );
 	//{{AFX_DATA_MAP(CMapInfo)
 	DDX_Control( pDX, IDC_LIST_ENTITIES, m_lstEntity );
@@ -77,7 +79,8 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CMapInfo message handlers
 
-BOOL CMapInfo::OnInitDialog( void ) {
+BOOL CMapInfo::OnInitDialog()
+{
 	CDialog::OnInitDialog();
 
 	m_nTotalBrushes = 0;
@@ -93,45 +96,61 @@ BOOL CMapInfo::OnInitDialog( void ) {
 	idStr     mtrName;
 // <--- sikk - Added
 
-	for ( brush_t* pBrush = active_brushes.next; pBrush != &active_brushes; pBrush = pBrush->next ) {
+	for( brush_t* pBrush = active_brushes.next; pBrush != &active_brushes; pBrush = pBrush->next )
+	{
 		m_nTotalBrushes++;
-		if ( pBrush->owner == world_entity ) {
+		if( pBrush->owner == world_entity )
+		{
 			m_nTotalWorldBrushes++;
-			for ( face_t* pFace = pBrush->brush_faces; pFace; pFace = pFace->next ) {
+			for( face_t* pFace = pBrush->brush_faces; pFace; pFace = pFace->next )
+			{
 				m_nTotalFaces++;
 			}
-				
-		} else {
-			if ( pBrush->owner->eclass->fixedsize ) {
+
+		}
+		else
+		{
+			if( pBrush->owner->eclass->fixedsize )
+			{
 				m_nTotalPointEntities++;
-			} else {
+			}
+			else
+			{
 				m_nTotalBrushEntities++;
-				for ( face_t* pFace = pBrush->brush_faces; pFace; pFace = pFace->next ) {
+				for( face_t* pFace = pBrush->brush_faces; pFace; pFace = pFace->next )
+				{
 					m_nTotalFaces++;
 				}
 			}
 		}
 
-		if ( pBrush->pPatch ){
+		if( pBrush->pPatch )
+		{
 			mtrName = pBrush->pPatch->d_texture->GetName();
-			if ( !mtrList.Find( mtrName) ) {
+			if( !mtrList.Find( mtrName ) )
+			{
 				mtrList.Insert( mtrName );
 			}
-		} else {
-			for ( face_t* f = pBrush->brush_faces; f != NULL; f = f->next ) {
+		}
+		else
+		{
+			for( face_t* f = pBrush->brush_faces; f != NULL; f = f->next )
+			{
 				mtrName = f->d_texture->GetName();
-				if ( !mtrList.Find( mtrName ) ) {
+				if( !mtrList.Find( mtrName ) )
+				{
 					mtrList.Insert( mtrName );
 				}
 			}
-		}				
+		}
 	}
 	m_nTotalMaterials = mtrList.Num();
 
 	CMapStringToPtr mapEntity;
 
 	int nValue = 0;
-	for ( entity_t* pEntity = entities.next; pEntity != &entities; pEntity = pEntity->next ) {
+	for( entity_t* pEntity = entities.next; pEntity != &entities; pEntity = pEntity->next )
+	{
 		m_nTotalEntities++;
 		nValue = 0;
 		mapEntity.Lookup( pEntity->eclass->name, reinterpret_cast<void*&>( nValue ) );
@@ -140,10 +159,11 @@ BOOL CMapInfo::OnInitDialog( void ) {
 	}
 
 	m_lstEntity.ResetContent();
-	m_lstEntity.SetTabStops(96);
+	m_lstEntity.SetTabStops( 96 );
 	CString strKey;
 	POSITION pos = mapEntity.GetStartPosition();
-	while ( pos ) {
+	while( pos )
+	{
 		mapEntity.GetNextAssoc( pos, strKey, reinterpret_cast<void*&>( nValue ) );
 		CString strList;
 		strList.Format( "%s\t%i", strKey, nValue );
@@ -151,7 +171,7 @@ BOOL CMapInfo::OnInitDialog( void ) {
 	}
 
 	UpdateData( FALSE );
-	
+
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }

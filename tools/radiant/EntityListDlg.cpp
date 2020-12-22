@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,31 +34,35 @@ If you have questions concerning this license or the applicable additional terms
 #include "EntityListDlg.h"
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
+	#define new DEBUG_NEW
+	#undef THIS_FILE
+	static char THIS_FILE[] = __FILE__;
 #endif
 
 CEntityListDlg g_EntityListDlg;
 /////////////////////////////////////////////////////////////////////////////
 // CEntityListDlg dialog
 
-void CEntityListDlg::ShowDialog( void ) {
-	if ( g_EntityListDlg.GetSafeHwnd() == NULL ) {
+void CEntityListDlg::ShowDialog()
+{
+	if( g_EntityListDlg.GetSafeHwnd() == NULL )
+	{
 		g_EntityListDlg.Create( IDD_DLG_ENTITYLIST );
-	} 
+	}
 	g_EntityListDlg.UpdateList();
 	g_EntityListDlg.ShowWindow( SW_SHOW );
 }
 
 CEntityListDlg::CEntityListDlg( CWnd* pParent /*=NULL*/ )
-	: CDialog( CEntityListDlg::IDD, pParent ) {
+	: CDialog( CEntityListDlg::IDD, pParent )
+{
 	//{{AFX_DATA_INIT(CEntityListDlg)
 	//}}AFX_DATA_INIT
 }
 
 
-void CEntityListDlg::DoDataExchange( CDataExchange* pDX ) {
+void CEntityListDlg::DoDataExchange( CDataExchange* pDX )
+{
 	CDialog::DoDataExchange( pDX );
 	//{{AFX_DATA_MAP(CEntityListDlg)
 	DDX_Control( pDX, IDC_LIST_ENTITY, m_lstEntity );
@@ -67,16 +71,16 @@ void CEntityListDlg::DoDataExchange( CDataExchange* pDX ) {
 	//}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CEntityListDlg, CDialog)
+BEGIN_MESSAGE_MAP( CEntityListDlg, CDialog )
 	//{{AFX_MSG_MAP(CEntityListDlg)
-	ON_BN_CLICKED(IDC_SELECT, OnSelect)
+	ON_BN_CLICKED( IDC_SELECT, OnSelect )
 	ON_WM_CLOSE()
 // ---> sikk - Added - Changed Entity List Control to a Tree Control
 	ON_WM_DESTROY()
 	//ON_LBN_SELCHANGE(IDC_LIST_ENTITIES, OnLbnSelchangeListEntities)
 	//ON_LBN_DBLCLK(IDC_LIST_ENTITIES, OnLbnDblclkListEntities)
-	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE_ENTITIES, OnSelchangedTreeEntity)
-	ON_NOTIFY(NM_DBLCLK, IDC_TREE_ENTITIES, OnDblclkTreeEntity)
+	ON_NOTIFY( TVN_SELCHANGED, IDC_TREE_ENTITIES, OnSelchangedTreeEntity )
+	ON_NOTIFY( NM_DBLCLK, IDC_TREE_ENTITIES, OnDblclkTreeEntity )
 // <--- sikk - Added - Changed Entity List Control to a Tree Control
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -84,7 +88,8 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CEntityListDlg message handlers
 
-void CEntityListDlg::OnSelect( void ) {
+void CEntityListDlg::OnSelect()
+{
 // ---> sikk - Added - Changed Entity List Control to a Tree Control
 	//int index = listEntities.GetCurSel();
 	//if ( index != LB_ERR ) {
@@ -92,15 +97,17 @@ void CEntityListDlg::OnSelect( void ) {
 	//	if ( ent ) {
 	//		Select_Deselect();
 	//		Select_Brush( ent->brushes.onext );
-	//		
+	//
 	//		g_pParentWnd->OnViewCenter();	// sikk - Selection Centers views on entity
 	//	}
 	//}
 
 	HTREEITEM hItem = m_treeEntity.GetSelectedItem();
-	if ( hItem ) {
+	if( hItem )
+	{
 		entity_t* pEntity = reinterpret_cast<entity_t*>( m_treeEntity.GetItemData( hItem ) );
-		if ( pEntity ) {
+		if( pEntity )
+		{
 			Select_Deselect();
 			Select_Brush( pEntity->brushes.onext );
 			g_pParentWnd->OnViewCenter();	// sikk - Selection Centers views on entity
@@ -111,7 +118,8 @@ void CEntityListDlg::OnSelect( void ) {
 	Sys_UpdateWindows( W_ALL );
 }
 
-void CEntityListDlg::UpdateList( void ) {
+void CEntityListDlg::UpdateList()
+{
 // ---> sikk - Added - Changed Entity List Control to a Tree Control
 	//listEntities.ResetContent();
 	//for ( entity_t* pEntity=entities.next; pEntity != &entities; pEntity=pEntity->next ) {
@@ -128,12 +136,15 @@ void CEntityListDlg::UpdateList( void ) {
 	HTREEITEM hChild = m_treeEntity.InsertItem( world_entity->eclass->name, hParent );
 	m_treeEntity.SetItemData( hChild, reinterpret_cast<DWORD>( world_entity ) );
 
-	for ( entity_t* pEntity = entities.next; pEntity != &entities; pEntity = pEntity->next ) {
-		if ( pEntity->eclass->name == "worldspawn" ) {
+	for( entity_t* pEntity = entities.next; pEntity != &entities; pEntity = pEntity->next )
+	{
+		if( pEntity->eclass->name == "worldspawn" )
+		{
 			continue;
 		}
 		hParent = NULL;
-		if ( mapEntity.Lookup( pEntity->eclass->name, reinterpret_cast<void*&>( hParent ) ) == FALSE ) {
+		if( mapEntity.Lookup( pEntity->eclass->name, reinterpret_cast<void*&>( hParent ) ) == FALSE )
+		{
 			hParent = m_treeEntity.InsertItem( pEntity->eclass->name );
 			mapEntity.SetAt( pEntity->eclass->name, reinterpret_cast<void*>( hParent ) );
 		}
@@ -141,24 +152,28 @@ void CEntityListDlg::UpdateList( void ) {
 		m_treeEntity.SetItemData( hChild, reinterpret_cast<DWORD>( pEntity ) );
 	}
 
-	m_treeEntity.SortChildren( TVI_ROOT );  
+	m_treeEntity.SortChildren( TVI_ROOT );
 
 // <--- sikk - Added - Changed Entity List Control to a Tree Control
 }
 
-void CEntityListDlg::OnSysCommand( UINT nID,  LPARAM lParam ) {
-	if ( nID == SC_CLOSE ) {
+void CEntityListDlg::OnSysCommand( UINT nID,  LPARAM lParam )
+{
+	if( nID == SC_CLOSE )
+	{
 		DestroyWindow();
 	}
 }
 
-void CEntityListDlg::OnCancel( void ) {
+void CEntityListDlg::OnCancel()
+{
 	DestroyWindow();
 }
 
-BOOL CEntityListDlg::OnInitDialog( void ) {
+BOOL CEntityListDlg::OnInitDialog()
+{
 	CDialog::OnInitDialog();
-	
+
 //	UpdateList();
 
 	CRect rct;
@@ -167,16 +182,17 @@ BOOL CEntityListDlg::OnInitDialog( void ) {
 	m_lstEntity.InsertColumn( 1, "Value", LVCFMT_LEFT, rct.Width() / 2 );
 	m_lstEntity.DeleteColumn( 2 );
 	UpdateData( FALSE );
-	
+
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CEntityListDlg::OnClose( void ) {
+void CEntityListDlg::OnClose()
+{
 	DestroyWindow();
 }
 
-//void CEntityListDlg::OnLbnSelchangeListEntities( void ) {
+//void CEntityListDlg::OnLbnSelchangeListEntities() {
 //	int index = listEntities.GetCurSel();
 //	if ( index != LB_ERR ) {
 //		m_lstEntity.DeleteAllItems();
@@ -191,7 +207,7 @@ void CEntityListDlg::OnClose( void ) {
 //	}
 //}
 //
-//void CEntityListDlg::OnLbnDblclkListEntities( void ) {
+//void CEntityListDlg::OnLbnDblclkListEntities() {
 //  OnSelect();
 //}
 
@@ -202,17 +218,21 @@ void CEntityListDlg::OnClose( void ) {
 OnSelchangedTreeEntity
 ===============
 */
-void CEntityListDlg::OnSelchangedTreeEntity( NMHDR* pNMHDR, LRESULT* pResult ) {
-	NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
+void CEntityListDlg::OnSelchangedTreeEntity( NMHDR* pNMHDR, LRESULT* pResult )
+{
+	NM_TREEVIEW* pNMTreeView = ( NM_TREEVIEW* )pNMHDR;
 	HTREEITEM hItem = m_treeEntity.GetSelectedItem();
 	m_lstEntity.DeleteAllItems();
-	if ( hItem ) {
+	if( hItem )
+	{
 		CString strList;
 		entity_t* pEntity = reinterpret_cast<entity_t*>( m_treeEntity.GetItemData( hItem ) );
-		if ( pEntity ) {
+		if( pEntity )
+		{
 			int count = pEntity->epairs.GetNumKeyVals();
-			for ( int i = 0; i < count; i++ ) {
-				int nParent = m_lstEntity.InsertItem( 0, pEntity->epairs.GetKeyVal(i)->GetKey() );
+			for( int i = 0; i < count; i++ )
+			{
+				int nParent = m_lstEntity.InsertItem( 0, pEntity->epairs.GetKeyVal( i )->GetKey() );
 				m_lstEntity.SetItem( nParent, 1, LVIF_TEXT, pEntity->epairs.GetKeyVal( i )->GetValue(), 0, 0, 0, reinterpret_cast<DWORD>( pEntity ) );
 			}
 		}
@@ -225,7 +245,8 @@ void CEntityListDlg::OnSelchangedTreeEntity( NMHDR* pNMHDR, LRESULT* pResult ) {
 OnDblclkTreeEntity
 ===============
 */
-void CEntityListDlg::OnDblclkTreeEntity( NMHDR* pNMHDR, LRESULT* pResult ) {
+void CEntityListDlg::OnDblclkTreeEntity( NMHDR* pNMHDR, LRESULT* pResult )
+{
 	OnSelect();
 //	*pResult = 0;
 }

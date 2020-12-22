@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 // movementType
-typedef enum pmtype_e {
+typedef enum pmtype_e
+{
 	PM_NORMAL,				// normal physics
 	PM_DEAD,				// no acceleration or turning, but free falling
 	PM_SPECTATOR,			// flying without gravity but with collision detection
@@ -49,16 +50,18 @@ typedef enum pmtype_e {
 	PM_NOCLIP				// flying without collision detection nor gravity
 } pmtype_t;
 
- typedef enum {
-	 WATERLEVEL_NONE,
-	 WATERLEVEL_FEET,
-	 WATERLEVEL_WAIST,
-	 WATERLEVEL_HEAD
- } waterLevel_t;
+typedef enum
+{
+	WATERLEVEL_NONE,
+	WATERLEVEL_FEET,
+	WATERLEVEL_WAIST,
+	WATERLEVEL_HEAD
+} waterLevel_t;
 
 #define	MAXTOUCH					32
 
-typedef struct playerPState_s {
+typedef struct playerPState_s
+{
 	idVec3					origin;
 	idVec3					velocity;
 	idVec3					localOrigin;
@@ -69,64 +72,65 @@ typedef struct playerPState_s {
 	int						movementTime;
 } playerPState_t;
 
-class idPhysics_Player : public idPhysics_Actor {
+class idPhysics_Player : public idPhysics_Actor
+{
 
 public:
 	CLASS_PROTOTYPE( idPhysics_Player );
 
-							idPhysics_Player( void );
+	idPhysics_Player();
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save( idSaveGame* savefile ) const;
+	void					Restore( idRestoreGame* savefile );
 
-							// initialisation
+	// initialisation
 	void					SetSpeed( const float newWalkSpeed, const float newCrouchSpeed, const float newLadderSpeed );	// sikk - Added ladderspeed arg
 	void					SetMaxStepHeight( const float newMaxStepHeight );
-	float					GetMaxStepHeight( void ) const;
+	float					GetMaxStepHeight() const;
 	void					SetMaxJumpHeight( const float newMaxJumpHeight );
 	void					SetMovementType( const pmtype_t type );
-	void					SetPlayerInput( const usercmd_t &cmd, const idAngles &newViewAngles );
+	void					SetPlayerInput( const usercmd_t& cmd, const idAngles& newViewAngles );
 	void					SetKnockBack( const int knockBackTime );
 	void					SetDebugLevel( bool set );
-							// feed back from last physics frame
+	// feed back from last physics frame
 
-	 waterLevel_t			GetWaterLevel( void ) const;
-	 int					GetWaterType( void ) const;
+	waterLevel_t			GetWaterLevel() const;
+	int					GetWaterType() const;
 
-	bool					HasJumped( void ) const;
-	bool					HasSteppedUp( void ) const;
-	float					GetStepUp( void ) const;
-	bool					IsCrouching( void ) const;
-	bool					OnLadder( void ) const;
-	const idVec3 &			PlayerGetOrigin( void ) const;	// != GetOrigin
+	bool					HasJumped() const;
+	bool					HasSteppedUp() const;
+	float					GetStepUp() const;
+	bool					IsCrouching() const;
+	bool					OnLadder() const;
+	const idVec3& 			PlayerGetOrigin() const;	// != GetOrigin
 
 public:	// common physics interface
 	bool					Evaluate( int timeStepMSec, int endTimeMSec );
 	void					UpdateTime( int endTimeMSec );
-	int						GetTime( void ) const;
+	int						GetTime() const;
 
-	void					GetImpactInfo( const int id, const idVec3 &point, impactInfo_t *info ) const;
-	void					ApplyImpulse( const int id, const idVec3 &point, const idVec3 &impulse );
-	bool					IsAtRest( void ) const;
-	int						GetRestStartTime( void ) const;
+	void					GetImpactInfo( const int id, const idVec3& point, impactInfo_t* info ) const;
+	void					ApplyImpulse( const int id, const idVec3& point, const idVec3& impulse );
+	bool					IsAtRest() const;
+	int						GetRestStartTime() const;
 
-	void					SaveState( void );
-	void					RestoreState( void );
+	void					SaveState();
+	void					RestoreState();
 
-	void					SetOrigin( const idVec3 &newOrigin, int id = -1 );
-	void					SetAxis( const idMat3 &newAxis, int id = -1 );
+	void					SetOrigin( const idVec3& newOrigin, int id = -1 );
+	void					SetAxis( const idMat3& newAxis, int id = -1 );
 
-	void					Translate( const idVec3 &translation, int id = -1 );
-	void					Rotate( const idRotation &rotation, int id = -1 );
+	void					Translate( const idVec3& translation, int id = -1 );
+	void					Rotate( const idRotation& rotation, int id = -1 );
 
-	void					SetLinearVelocity( const idVec3 &newLinearVelocity, int id = 0 );
-	const idVec3 &			GetLinearVelocity( int id = 0 ) const;
+	void					SetLinearVelocity( const idVec3& newLinearVelocity, int id = 0 );
+	const idVec3& 			GetLinearVelocity( int id = 0 ) const;
 
 	void					SetPushed( int deltaTime );
-	const idVec3 &			GetPushedLinearVelocity( const int id = 0 ) const;
-	void					ClearPushedVelocity( void );
+	const idVec3& 			GetPushedLinearVelocity( const int id = 0 ) const;
+	void					ClearPushedVelocity();
 
-	void					SetMaster( idEntity *master, const bool orientated = true );
+	void					SetMaster( idEntity* master, const bool orientated = true );
 
 private:
 	// player physics state
@@ -157,40 +161,40 @@ private:
 	bool					walking;
 	bool					groundPlane;
 	trace_t					groundTrace;
-	const idMaterial *		groundMaterial;
+	const idMaterial* 		groundMaterial;
 
 	// ladder movement
 	bool					ladder;
 	idVec3					ladderNormal;
 
-	 // results of last evaluate
-	 waterLevel_t			waterLevel;
-	 int					waterType;
+	// results of last evaluate
+	waterLevel_t			waterLevel;
+	int					waterType;
 
 private:
-	float					CmdScale( const usercmd_t &cmd ) const;
-	void					Accelerate( const idVec3 &wishdir, const float wishspeed, const float accel );
+	float					CmdScale( const usercmd_t& cmd ) const;
+	void					Accelerate( const idVec3& wishdir, const float wishspeed, const float accel );
 	bool					SlideMove( bool gravity, bool stepUp, bool stepDown, bool push );
-	void					Friction( void );
-	void					WaterJumpMove( void );
-	void					WaterMove( void );
-	void					FlyMove( void );
-	void					AirMove( void );
-	void					WalkMove( void );
-	void					DeadMove( void );
-	void					NoclipMove( void );
-	void					SpectatorMove( void );
-	void					LadderMove( void );
-	void					CorrectAllSolid( trace_t &trace, int contents );
-	void					CheckGround( void );
-	void					CheckDuck( void );
-	void					CheckLadder( void );
-	bool					CheckJump( void );
-	bool					CheckWaterJump( void );
+	void					Friction();
+	void					WaterJumpMove();
+	void					WaterMove();
+	void					FlyMove();
+	void					AirMove();
+	void					WalkMove();
+	void					DeadMove();
+	void					NoclipMove();
+	void					SpectatorMove();
+	void					LadderMove();
+	void					CorrectAllSolid( trace_t& trace, int contents );
+	void					CheckGround();
+	void					CheckDuck();
+	void					CheckLadder();
+	bool					CheckJump();
+	bool					CheckWaterJump();
 
-	void					SetWaterLevel( void );
+	void					SetWaterLevel();
 
-	void					DropTimers( void );
+	void					DropTimers();
 	void					MovePlayer( int msec );
 };
 

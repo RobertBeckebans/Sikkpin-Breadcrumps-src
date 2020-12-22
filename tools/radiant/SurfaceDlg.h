@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #define AFX_SURFACEDLG_H__D84E0C22_9EEA_11D1_B570_00AA00A410FC__INCLUDED_
 
 #if _MSC_VER >= 1000
-#pragma once
+	#pragma once
 #endif // _MSC_VER >= 1000
 // SurfaceDlg.h : header file
 //
@@ -37,21 +37,22 @@ If you have questions concerning this license or the applicable additional terms
 /////////////////////////////////////////////////////////////////////////////
 // CSurfaceDlg dialog
 
-class CSurfaceDlg : public CDialog {
+class CSurfaceDlg : public CDialog
+{
 	bool			m_bPatchMode;
-	CWnd			*focusControl;
-	patchMesh_t		*m_Patch;	// sikk - Merged Patch Inspector into Surface Inspector
+	CWnd*			focusControl;
+	patchMesh_t*		m_Patch;	// sikk - Merged Patch Inspector into Surface Inspector
 
 	// Construction
 public:
-					CSurfaceDlg( CWnd* pParent = NULL );   // standard constructor
-	void			SetTexMods( void );
+	CSurfaceDlg( CWnd* pParent = NULL );   // standard constructor
+	void			SetTexMods();
 
 // ---> sikk - Merged Patch Inspector into Surface Inspector
 // <--- sikk - Merged Patch Inspector into Surface Inspector
-	void			UpdateInfo( void );
-	void			SetPatchInfo( void );
-	void			GetPatchInfo( void );
+	void			UpdateInfo();
+	void			SetPatchInfo();
+	void			GetPatchInfo();
 // <--- sikk - Merged Patch Inspector into Surface Inspector
 
 // Dialog Data
@@ -120,57 +121,57 @@ protected:
 	void			UpdateSpinners( int nScrollCode, int nPos, CScrollBar* pBar );
 	void			UpdateSpinners( bool bUp, int nID );
 
-	void			UpdateRowColInfo( void );	// sikk - Merged Patch Inspector into Surface Inspector
+	void			UpdateRowColInfo();	// sikk - Merged Patch Inspector into Surface Inspector
 
 	// Generated message map functions
 	//{{AFX_MSG(CSurfaceDlg)
-	virtual BOOL	OnInitDialog( void );
+	virtual BOOL	OnInitDialog();
 	afx_msg void	OnHScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar );
 	afx_msg void	OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags );
 	afx_msg void	OnVScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar );
-	afx_msg void	OnApply( void );
-	virtual void	OnOK( void );
-	afx_msg void	OnClose( void );
-	virtual void	OnCancel( void );
-	afx_msg void	OnDestroy( void );
-	afx_msg void	OnBtnCancel( void );
-	afx_msg void	OnBtnColor( void );
+	afx_msg void	OnApply();
+	virtual void	OnOK();
+	afx_msg void	OnClose();
+	virtual void	OnCancel();
+	afx_msg void	OnDestroy();
+	afx_msg void	OnBtnCancel();
+	afx_msg void	OnBtnColor();
 	afx_msg HBRUSH	OnCtlColor( CDC* pDC, CWnd* pWnd, UINT nCtlColor );
 	afx_msg int		OnCreate( LPCREATESTRUCT lpCreateStruct );
 	afx_msg void	OnDeltaPosSpin( NMHDR* pNMHDR, LRESULT* pResult );
-	afx_msg void	OnBtnPatchdetails( void );
-	afx_msg void	OnBtnPatchnatural( void );
-	afx_msg void	OnBtnPatchreset( void );
-	afx_msg void	OnBtnAxial( void );
-	afx_msg void	OnBtnBrushfit( void );
-	afx_msg void	OnBtnFacefit( void );
-	afx_msg void	OnCheckSubdivide( void );
-	afx_msg void	OnChangeEditHorz( void );
-	afx_msg void	OnChangeEditVert( void );
-	afx_msg void	OnSetfocusHscale( void );
-	afx_msg void	OnKillfocusHscale( void );
-	afx_msg void	OnKillfocusVscale( void );
-	afx_msg void	OnSetfocusVscale( void );
-	afx_msg void	OnKillfocusEditWidth( void );
-	afx_msg void	OnSetfocusEditWidth( void );
-	afx_msg void	OnKillfocusEditHeight( void );
-	afx_msg void	OnSetfocusEditHeight( void );
-	afx_msg void	OnBtnFlipx( void );
-	afx_msg void	OnBtnFlipy( void );
-	afx_msg void	OnKillfocusRotate( void );
-	afx_msg void	OnSetfocusRotate( void );
+	afx_msg void	OnBtnPatchdetails();
+	afx_msg void	OnBtnPatchnatural();
+	afx_msg void	OnBtnPatchreset();
+	afx_msg void	OnBtnAxial();
+	afx_msg void	OnBtnBrushfit();
+	afx_msg void	OnBtnFacefit();
+	afx_msg void	OnCheckSubdivide();
+	afx_msg void	OnChangeEditHorz();
+	afx_msg void	OnChangeEditVert();
+	afx_msg void	OnSetfocusHscale();
+	afx_msg void	OnKillfocusHscale();
+	afx_msg void	OnKillfocusVscale();
+	afx_msg void	OnSetfocusVscale();
+	afx_msg void	OnKillfocusEditWidth();
+	afx_msg void	OnSetfocusEditWidth();
+	afx_msg void	OnKillfocusEditHeight();
+	afx_msg void	OnSetfocusEditHeight();
+	afx_msg void	OnBtnFlipx();
+	afx_msg void	OnBtnFlipy();
+	afx_msg void	OnKillfocusRotate();
+	afx_msg void	OnSetfocusRotate();
 
 // ---> sikk - Merged Patch Inspector into Surface Inspector
-	afx_msg void	OnBtnPatchfit( void );
-	afx_msg void	OnSelchangeComboCol( void );
-	afx_msg void	OnSelchangeComboRow( void );
-	afx_msg void	OnSelchangeComboType( void );
+	afx_msg void	OnBtnPatchfit();
+	afx_msg void	OnSelchangeComboCol();
+	afx_msg void	OnSelchangeComboRow();
+	afx_msg void	OnSelchangeComboType();
 // <--- sikk - Merged Patch Inspector into Surface Inspector
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 public:
-	afx_msg void	OnEnChangeVshift( void );
+	afx_msg void	OnEnChangeVshift();
 };
 
 //{{AFX_INSERT_LOCATION}}

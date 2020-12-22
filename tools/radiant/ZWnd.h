@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #define AFX_ZWND_H__44B4BA02_781B_11D1_B53C_00AA00A410FC__INCLUDED_
 
 #if _MSC_VER >= 1000
-#pragma once
+	#pragma once
 #endif // _MSC_VER >= 1000
 // ZWnd.h : header file
 //
@@ -40,7 +40,8 @@ If you have questions concerning this license or the applicable additional terms
 // CZWnd window
 
 // ---> sikk - Moved z.h/z.cpp contents here
-typedef struct {
+typedef struct
+{
 	int		width, height;
 	idVec3	origin;			// at center of window
 	float	scale;
@@ -51,11 +52,11 @@ extern z_t z;
 
 class CZWnd : public CWnd
 {
-  DECLARE_DYNCREATE(CZWnd);
+	DECLARE_DYNCREATE( CZWnd );
 // Construction
 public:
-				CZWnd( void );
-	virtual		~CZWnd( void );
+	CZWnd();
+	virtual		~CZWnd();
 
 // Attributes
 public:
@@ -67,54 +68,54 @@ public:
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CZWnd)
 protected:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
 	//}}AFX_VIRTUAL
 
 // Implementation
 public:
 // ---> sikk - Moved z.h/z.cpp contents here
-	void		Z_Init( void );
+	void		Z_Init();
 	void		Z_MouseDown( int x, int y, int buttons );
 	void		Z_MouseUp( int x, int y, int buttons );
 	void		Z_MouseMoved( int x, int y, int buttons );
-	void		Z_Draw( void );
-	void		Z_DrawGrid( void );
-	void		Z_DrawCameraIcon( void );
-	void		Z_DrawZClip( void );
+	void		Z_Draw();
+	void		Z_DrawGrid();
+	void		Z_DrawCameraIcon();
+	void		Z_DrawZClip();
 // <--- sikk - Moved z.h/z.cpp contents here
 
 	void 		PositionView();	// sikk - Added for center view command
-	
-	CZClip		*m_pZClip;
+
+	CZClip*		m_pZClip;
 
 	// Generated message map functions
 protected:
 	HDC m_dcZ;
 	HGLRC m_hglrcZ;
 	//{{AFX_MSG(CZWnd)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
 	afx_msg void OnDestroy();
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags );
+	afx_msg void OnLButtonDown( UINT nFlags, CPoint point );
+	afx_msg void OnMButtonDown( UINT nFlags, CPoint point );
+	afx_msg void OnRButtonDown( UINT nFlags, CPoint point );
 	afx_msg void OnPaint();
-	afx_msg void OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI );
+	afx_msg void OnMouseMove( UINT nFlags, CPoint point );
+	afx_msg void OnSize( UINT nType, int cx, int cy );
 // ---> sikk - Window Snapping
-	afx_msg void OnSizing(UINT nSide, LPRECT lpRect);
-	afx_msg void OnMoving(UINT nSide, LPRECT lpRect);
+	afx_msg void OnSizing( UINT nSide, LPRECT lpRect );
+	afx_msg void OnMoving( UINT nSide, LPRECT lpRect );
 // <--- sikk - Window Snapping
-	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
-	afx_msg void OnKillFocus(CWnd* pNewWnd);
-	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	afx_msg void OnNcCalcSize( BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp );
+	afx_msg void OnKillFocus( CWnd* pNewWnd );
+	afx_msg void OnSetFocus( CWnd* pOldWnd );
 	afx_msg void OnClose();
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnMButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnLButtonUp( UINT nFlags, CPoint point );
+	afx_msg void OnMButtonUp( UINT nFlags, CPoint point );
+	afx_msg void OnRButtonUp( UINT nFlags, CPoint point );
+	afx_msg BOOL OnMouseWheel( UINT nFlags, short zDelta, CPoint pt );
+	afx_msg void OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags );
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

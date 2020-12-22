@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 #define AFX_MAINFRM_H__330BBF0A_731C_11D1_B539_00AA00A410FC__INCLUDED_
 
 #if _MSC_VER >= 1000
-#pragma once
+	#pragma once
 #endif // _MSC_VER >= 1000
 
 #include "XYWnd.h"
@@ -46,28 +46,35 @@ const int RAD_ALT		= 0x02;
 const int RAD_CONTROL	= 0x04;
 const int RAD_PRESS		= 0x08;
 
-struct SCommandInfo {
-	char			*m_strCommand;
+struct SCommandInfo
+{
+	char*			m_strCommand;
 	unsigned int	m_nKey;
 	unsigned int	m_nModifiers;
 	unsigned int	m_nCommand;
 };
 
-struct SKeyInfo {
-	char			*m_strName;
+struct SKeyInfo
+{
+	char*			m_strName;
 	unsigned int	m_nVKKey;
 };
 
 
-class CMainFrame : public CFrameWnd {
-	DECLARE_DYNAMIC(CMainFrame)
+class CMainFrame : public CFrameWnd
+{
+	DECLARE_DYNAMIC( CMainFrame )
 public:
-						CMainFrame( void );
+	CMainFrame();
 	virtual				~CMainFrame();
-	void				HandleKey( UINT nChar, UINT nRepCnt, UINT nFlags, bool bDown = true ) {
-		if ( bDown ) {
+	void				HandleKey( UINT nChar, UINT nRepCnt, UINT nFlags, bool bDown = true )
+	{
+		if( bDown )
+		{
 			OnKeyDown( nChar, nRepCnt, nFlags );
-		} else {
+		}
+		else
+		{
 			OnKeyUp( nChar, nRepCnt, nFlags );
 		}
 	};
@@ -93,48 +100,78 @@ protected:
 
 	// Implementation
 public:
-	void 				UpdatePatchToolbarButtons( void );
+	void 				UpdatePatchToolbarButtons();
 	void 				NudgeSelection( int nDirection, float fAmount );
-	void 				UpdateTextureBar( void );
-	void 				SetButtonMenuStates( void );
-	void 				SetTexValStatus( void );
-	void 				SetGridStatus( void );
-	void 				RoutineProcessing( void );
-	CXYWnd* 			ActiveXY( void );
+	void 				UpdateTextureBar();
+	void 				SetButtonMenuStates();
+	void 				SetTexValStatus();
+	void 				SetGridStatus();
+	void 				RoutineProcessing();
+	CXYWnd* 			ActiveXY();
 	void 				UpdateWindows( int nBits );
 	void 				SetStatusText( int nPane, const char* pText );
-	void 				UpdateStatusText( void );
+	void 				UpdateStatusText();
 	void 				SetWindowStyle( int nStyle );
-	bool 				GetNurbMode( void ) { return nurbMode; }
-	idCurve_NURBS<idVec2> *GetNurb( void ) { return &nurb; }
-	void 				OnPrecisionCursorCycle( void );
+	bool 				GetNurbMode()
+	{
+		return nurbMode;
+	}
+	idCurve_NURBS<idVec2>* GetNurb()
+	{
+		return &nurb;
+	}
+	void 				OnPrecisionCursorCycle();
 
-	CXYWnd*				GetXYWnd( void ) { return m_pXYWnd; };
-	CXYWnd*				GetXZWnd( void ) { return m_pXZWnd; };
-	CXYWnd*				GetYZWnd( void ) { return m_pYZWnd; };
-	CCamWnd*			GetCamera( void ) { return m_pCamWnd; };
-	CZWnd*				GetZWnd( void ) { return m_pZWnd; };
+	CXYWnd*				GetXYWnd()
+	{
+		return m_pXYWnd;
+	};
+	CXYWnd*				GetXZWnd()
+	{
+		return m_pXZWnd;
+	};
+	CXYWnd*				GetYZWnd()
+	{
+		return m_pYZWnd;
+	};
+	CCamWnd*			GetCamera()
+	{
+		return m_pCamWnd;
+	};
+	CZWnd*				GetZWnd()
+	{
+		return m_pZWnd;
+	};
 
 // ---> sikk - Window Snapping
-//	CInspectorDialog*	GetInspectorsWnd( void ) { return m_wndInspectors; };
-	CStatusBar*			GetStatusbarWnd( void ) { return &m_wndStatusBar; };
-	CToolBar*			GetToolbarWnd( void ) { return &m_wndToolBar; };
+//	CInspectorDialog*	GetInspectorsWnd() { return m_wndInspectors; };
+	CStatusBar*			GetStatusbarWnd()
+	{
+		return &m_wndStatusBar;
+	};
+	CToolBar*			GetToolbarWnd()
+	{
+		return &m_wndToolBar;
+	};
 // <--- sikk - Window Snapping
 
-	void SetActiveXY( CXYWnd* p ) {
-		if ( m_pActiveXY ) {
+	void SetActiveXY( CXYWnd* p )
+	{
+		if( m_pActiveXY )
+		{
 			m_pActiveXY->SetActive( false );
 		}
 		m_pActiveXY = p;
 
-		if ( m_pActiveXY ) {
+		if( m_pActiveXY )
+		{
 			m_pActiveXY->SetActive( true );
 		}
 	};
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+	virtual void Dump( CDumpContext& dc ) const;
 #endif
 
 protected:  // control bar embedded members
@@ -162,12 +199,13 @@ protected:
 	void CreateQEChildren();
 	void LoadCommandMap();
 	void SaveCommandMap();
-	void ShowMenuItemKeyBindings(CMenu *pMenu);
+	void ShowMenuItemKeyBindings( CMenu* pMenu );
 	void SetEntityCheck();
-	void SetGridChecks(int nID);
+	void SetGridChecks( int nID );
 public:
-	void Nudge(int nDim, float fNudge);
-	void SetBusy(bool b) {
+	void Nudge( int nDim, float fNudge );
+	void SetBusy( bool b )
+	{
 		busy = b;
 	}
 
@@ -175,16 +213,16 @@ public:
 	// these are public so i can easily reflect messages
 	// from child windows..
 	//{{AFX_MSG(CMainFrame)
-	afx_msg void OnBSPStatus(UINT wParam, long lParam);
-	afx_msg void OnBSPDone(UINT wParam, long lParam);
-	afx_msg void OnParentNotify(UINT message, LPARAM lParam);
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnBSPStatus( UINT wParam, long lParam );
+	afx_msg void OnBSPDone( UINT wParam, long lParam );
+	afx_msg void OnParentNotify( UINT message, LPARAM lParam );
+	afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
+	afx_msg void OnTimer( UINT nIDEvent );
 	afx_msg void OnDestroy();
 	afx_msg void OnClose();
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags );
+	afx_msg void OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags );
+	afx_msg void OnSize( UINT nType, int cx, int cy );
 	afx_msg void ToggleCamera();
 	afx_msg void OnFileClose();
 	afx_msg void OnFileExit();
@@ -276,7 +314,7 @@ public:
 	afx_msg void OnSelectionVisibleOn();
 	afx_msg void OnSelectionVisibleOff();
 	afx_msg void OnAutocaulk();
-	afx_msg void OnUpdateAutocaulk(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateAutocaulk( CCmdUI* pCmdUI );
 
 	afx_msg void OnTexturesPopup();
 	afx_msg void OnSplinesPopup();
@@ -287,8 +325,8 @@ public:
 	afx_msg void OnPopupSelection();
 	afx_msg void OnViewChange();
 	afx_msg void OnViewCameraupdate();
-	afx_msg void OnUpdateViewCameraupdate(CCmdUI* pCmdUI);
-	afx_msg void OnSizing(UINT fwSide, LPRECT pRect);
+	afx_msg void OnUpdateViewCameraupdate( CCmdUI* pCmdUI );
+	afx_msg void OnSizing( UINT fwSide, LPRECT pRect );
 	afx_msg void OnHelpAbout();
 	afx_msg void OnViewClipper();
 	afx_msg void OnCameraAngledown();
@@ -342,8 +380,8 @@ public:
 	afx_msg void OnEditPastebrush();
 	afx_msg void OnEditUndo();
 	afx_msg void OnEditRedo();
-	afx_msg void OnUpdateEditUndo(CCmdUI* pCmdUI);
-	afx_msg void OnUpdateEditRedo(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateEditUndo( CCmdUI* pCmdUI );
+	afx_msg void OnUpdateEditRedo( CCmdUI* pCmdUI );
 	afx_msg void OnSelectionInvert();
 	afx_msg void OnSelectionTextureDec();
 	afx_msg void OnSelectionTextureFit();
@@ -368,11 +406,11 @@ public:
 	afx_msg void OnViewCubicclipping();
 	afx_msg void OnFileImport();
 	afx_msg void OnFileProjectsettings();
-	afx_msg void OnUpdateFileImport(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateFileImport( CCmdUI* pCmdUI );
 	afx_msg void OnViewCubein();
 	afx_msg void OnViewCubeout();
 	afx_msg void OnFileSaveregion();
-	afx_msg void OnUpdateFileSaveregion(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateFileSaveregion( CCmdUI* pCmdUI );
 	afx_msg void OnSelectionMovedown();
 	afx_msg void OnSelectionMoveup();
 	afx_msg void OnToolbarMain();
@@ -402,7 +440,7 @@ public:
 	afx_msg void OnSelectionSelectNudgeleft();
 	afx_msg void OnSelectionSelectNudgeright();
 	afx_msg void OnSelectionSelectNudgeup();
-	afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnSysKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags );
 	afx_msg void OnTexturesLoadlist();
 	afx_msg void OnDontselectcurve();
 	afx_msg void OnDynamicLighting();
@@ -477,7 +515,7 @@ public:
 	afx_msg void OnViewEntitiesasSkinnedandboxed();
 	afx_msg void OnViewEntitiesasWireframe();
 	afx_msg void OnViewShowhint();
-	afx_msg void OnUpdateTexturesShowinuse(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateTexturesShowinuse( CCmdUI* pCmdUI );
 	afx_msg void OnTexturesShowall();
 	afx_msg void OnTexturesHideall();
 	//afx_msg void OnPatchInspector();	// sikk - Merged Patch Inspector into Surface Inspector
@@ -507,7 +545,7 @@ public:
 	afx_msg void OnProjectedLight();
 	afx_msg void OnShowLighttextures();
 	afx_msg void OnShowLightvolumes();
-	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
+	afx_msg void OnActivate( UINT nState, CWnd* pWndOther, BOOL bMinimized );
 	afx_msg void OnSplinesMode();
 	afx_msg void OnSplinesLoad();
 	afx_msg void OnSplinesSave();
@@ -546,16 +584,16 @@ public:
 	afx_msg	void OnNurbEditor();
 	afx_msg void OnSelectCompleteEntity();
 	afx_msg void OnGenerateMaterialsList();
-	afx_msg void OnMru(unsigned int nID);
-	afx_msg void OnViewNearest(unsigned int nID);
-	afx_msg void OnTextureWad(unsigned int nID);
-	afx_msg void OnBspCommand(unsigned int nID);
-	afx_msg void OnGrid1(unsigned int nID);
-	afx_msg void OnDisplayChange(WPARAM wp, LPARAM lp);
+	afx_msg void OnMru( unsigned int nID );
+	afx_msg void OnViewNearest( unsigned int nID );
+	afx_msg void OnTextureWad( unsigned int nID );
+	afx_msg void OnBspCommand( unsigned int nID );
+	afx_msg void OnGrid1( unsigned int nID );
+	afx_msg void OnDisplayChange( WPARAM wp, LPARAM lp );
 	afx_msg void OnSelectAlltargets();
 
 	//}}AFX_MSG
-	void CheckTextureScale(int id);
+	void CheckTextureScale( int id );
 
 	DECLARE_MESSAGE_MAP()
 };

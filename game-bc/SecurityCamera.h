@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,21 +38,22 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 
-class idSecurityCamera : public idEntity {
+class idSecurityCamera : public idEntity
+{
 public:
 	CLASS_PROTOTYPE( idSecurityCamera );
 
-	void					Spawn( void );
+	void					Spawn();
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save( idSaveGame* savefile ) const;
+	void					Restore( idRestoreGame* savefile );
 
-	virtual void			Think( void );
+	virtual void			Think();
 
-	virtual renderView_t *	GetRenderView();
-	virtual void			Killed( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
-	virtual bool			Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
-	virtual void			Present( void );
+	virtual renderView_t* 	GetRenderView();
+	virtual void			Killed( idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location );
+	virtual bool			Pain( idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location );
+	virtual void			Present();
 
 
 private:
@@ -65,7 +66,7 @@ private:
 	bool					flipAxis;
 	float					scanDist;
 	float					scanFov;
-							
+
 	float					sweepStart;
 	float					sweepEnd;
 	bool					negativeSweep;
@@ -75,23 +76,23 @@ private:
 	float					scanFovCos;
 
 	idVec3					viewOffset;
-							
+
 	int						pvsArea;
 	idPhysics_RigidBody		physicsObj;
 	idTraceModel			trm;
 
-	void					StartSweep( void );
-	bool					CanSeePlayer( void );
+	void					StartSweep();
+	bool					CanSeePlayer();
 	void					SetAlertMode( int status );
-	void					DrawFov( void );
-	const idVec3			GetAxis( void ) const;
-	float					SweepSpeed( void ) const;
+	void					DrawFov();
+	const idVec3			GetAxis() const;
+	float					SweepSpeed() const;
 
-	void					Event_ReverseSweep( void );
-	void					Event_ContinueSweep( void );
-	void					Event_Pause( void );
-	void					Event_Alert( void );
-	void					Event_AddLight( void );
+	void					Event_ReverseSweep();
+	void					Event_ContinueSweep();
+	void					Event_Pause();
+	void					Event_Alert();
+	void					Event_AddLight();
 };
 
 #endif /* !__GAME_SECURITYCAMERA_H__ */

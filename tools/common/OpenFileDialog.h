@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,69 +34,69 @@ class rvOpenFileDialog
 {
 public:
 
-	rvOpenFileDialog ( void );
-	~rvOpenFileDialog ( void );
+	rvOpenFileDialog();
+	~rvOpenFileDialog();
 
-	bool			DoModal		( HWND parent );
-	const char*		GetFilename	( void );
+	bool			DoModal( HWND parent );
+	const char*		GetFilename();
 
-	void			SetFilter		( const char* filter );
-	void			SetTitle		( const char* title );
-	void			SetOKTitle		( const char* title );
-	void			SetInitialPath	( const char* path );
-	void			SetFlags		( int flags );
+	void			SetFilter( const char* filter );
+	void			SetTitle( const char* title );
+	void			SetOKTitle( const char* title );
+	void			SetInitialPath( const char* path );
+	void			SetFlags( int flags );
 
-	const char*		GetInitialPath  ( void );
+	const char*		GetInitialPath();
 
 protected:
 
-	void			UpdateFileList	( void );
-	void			UpdateLookIn	( void );
+	void			UpdateFileList();
+	void			UpdateLookIn();
 
 	HWND			mWnd;
 	HWND			mWndFileList;
 	HWND			mWndLookin;
-	
+
 	HINSTANCE		mInstance;
-	
+
 	HIMAGELIST		mImageList;
 	HBITMAP			mBackBitmap;
-	
+
 	static char		mLookin[ MAX_OSPATH ];
 	idStr			mFilename;
 	idStr			mTitle;
 	idStr			mOKTitle;
 	idStrList		mFilters;
-	
+
 	int				mFlags;
 
 private:
-	
-	void	HandleCommandOK			( void );
-	void	HandleLookInChange		( void );
-	void	HandleInitDialog		( void );
 
-	static INT_PTR CALLBACK DlgProc ( HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam );
+	void	HandleCommandOK();
+	void	HandleLookInChange();
+	void	HandleInitDialog();
+
+	static INT_PTR CALLBACK DlgProc( HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam );
 };
 
-ID_INLINE const char* rvOpenFileDialog::GetFilename ( void )
+ID_INLINE const char* rvOpenFileDialog::GetFilename()
 {
-	return mFilename.c_str ( );
+	return mFilename.c_str( );
 }
 
-ID_INLINE void rvOpenFileDialog::SetTitle ( const char* title )
+ID_INLINE void rvOpenFileDialog::SetTitle( const char* title )
 {
 	mTitle = title;
 }
 
-ID_INLINE void rvOpenFileDialog::SetOKTitle ( const char* title )
+ID_INLINE void rvOpenFileDialog::SetOKTitle( const char* title )
 {
 	mOKTitle = title;
 }
 
-ID_INLINE void rvOpenFileDialog::SetInitialPath ( const char* path )
+ID_INLINE void rvOpenFileDialog::SetInitialPath( const char* path )
 {
-	if ( !idStr::Cmpn( mLookin, path, strlen( path ) ) )
+	if( !idStr::Cmpn( mLookin, path, strlen( path ) ) )
 	{
 		return;
 	}
@@ -104,12 +104,12 @@ ID_INLINE void rvOpenFileDialog::SetInitialPath ( const char* path )
 	idStr::Copynz( mLookin, path, sizeof( mLookin ) );
 }
 
-ID_INLINE void rvOpenFileDialog::SetFlags ( int flags )
+ID_INLINE void rvOpenFileDialog::SetFlags( int flags )
 {
 	mFlags = flags;
 }
 
-ID_INLINE const char* rvOpenFileDialog::GetInitialPath ( void )
+ID_INLINE const char* rvOpenFileDialog::GetInitialPath()
 {
 	return mLookin;
 }

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,12 +35,13 @@ If you have questions concerning this license or the applicable additional terms
 
 // CInspectorDialog dialog
 
-class CInspectorDialog : public CTabsDlg {
+class CInspectorDialog : public CTabsDlg
+{
 	//DECLARE_DYNAMIC(CInspectorDialog)
 
 public:
-					CInspectorDialog( CWnd* pParent = NULL );   // standard constructor
-	virtual			~CInspectorDialog( void );
+	CInspectorDialog( CWnd* pParent = NULL );   // standard constructor
+	virtual			~CInspectorDialog();
 
 // Dialog Data
 	enum { IDD = IDD_DIALOG_INSPECTORS };
@@ -51,18 +52,18 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	virtual BOOL	OnInitDialog( void );
-	void			AssignModel( void );
+	virtual BOOL	OnInitDialog();
+	void			AssignModel();
 	void			SetMode( int mode, bool updateTabs = true );
-	void			UpdateEntitySel( eclass_t *ent );
-	void			UpdateSelectedEntity( void );
-	void			FillClassList( void );
-	bool			GetSelectAllCriteria( idStr &key, idStr &val );
-	void			SetDockedTabs ( bool docked, int ID );	
+	void			UpdateEntitySel( eclass_t* ent );
+	void			UpdateSelectedEntity();
+	void			FillClassList();
+	bool			GetSelectAllCriteria( idStr& key, idStr& val );
+	void			SetDockedTabs( bool docked, int ID );
 
 	afx_msg void	OnSize( UINT nType, int cx, int cy );
-	afx_msg void	OnDestroy( void );
-	afx_msg void	OnClose( void );
+	afx_msg void	OnDestroy();
+	afx_msg void	OnClose();
 	virtual BOOL	PreTranslateMessage( MSG* pMsg );
 
 	CTabCtrl		tabInspector;
@@ -75,4 +76,4 @@ public:
 	int prevMode;	// sikk - Added
 };
 
-extern CInspectorDialog *g_Inspectors;
+extern CInspectorDialog* g_Inspectors;
